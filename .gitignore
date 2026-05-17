@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Local database and service volumes
+postgres_data/
+neo4j_data/
+neo4j_logs/
+mlflow_data/
+data/postgres/
+data/neo4j/
+data/mlflow/
+
+# MLflow artefacts
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Runtime logs
+logs/
+*.log
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

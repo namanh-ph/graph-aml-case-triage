@@ -1,0 +1,9 @@
+release_run_id,evidence_name,evidence_type,relative_path,status,details,metadata
+portfolio_release_v1_20260513154530_9e0b357891a7,architecture_summary,architecture_summary,release_pack/architecture_summary.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,command_transcript_template,command_transcript,release_pack/command_transcript_template.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,dashboard_walkthrough,dashboard_walkthrough,release_pack/dashboard_walkthrough.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,demo_validation_checklist,demo_checklist,release_pack/demo_validation_checklist.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,portfolio_summary,portfolio_summary,release_pack/portfolio_summary.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,release_evidence_index,index,release_evidence_index.csv,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,release_readiness_report,md,release_readiness_report.md,available,{'generated': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,release_validation_index,index,release_validation_index.csv,available,{'generated': True},{}

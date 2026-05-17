@@ -1,0 +1,97 @@
+{
+  "artefacts": {
+    "artefact_type_counts": {
+      "data_documentation": 2,
+      "documentation": 2,
+      "governance": 2,
+      "metrics": 1,
+      "model_card": 3,
+      "model_validation": 3,
+      "monitoring": 2,
+      "security": 2
+    },
+    "failure_count": 5,
+    "pass_count": 6,
+    "required_count": 9,
+    "row_count": 17,
+    "status_counts": {
+      "fail": 5,
+      "not_applicable": 6,
+      "pass": 6
+    },
+    "warning_count": 0
+  },
+  "documentation": {
+    "document_count": 8,
+    "failure_count": 0,
+    "pass_count": 20,
+    "row_count": 21,
+    "status_counts": {
+      "pass": 20,
+      "warning": 1
+    },
+    "warning_count": 1
+  },
+  "evidence": {
+    "evidence_type_counts": {
+      "architecture_summary": 1,
+      "command_transcript": 1,
+      "dashboard_walkthrough": 1,
+      "demo_checklist": 1,
+      "index": 2,
+      "md": 1,
+      "portfolio_summary": 1
+    },
+    "row_count": 8
+  },
+  "metadata": {
+    "generated_at": "2026-05-13T15:45:30.969347+00:00",
+    "input_availability": {
+      "audit_summary": true,
+      "engine_supplied": true,
+      "governance_summary": true,
+      "model_summary": true,
+      "release_name": true,
+      "release_version": true,
+      "security_summary": true,
+      "validation_summary": true
+    },
+    "release_name": "aml_portfolio_release",
+    "release_version": "portfolio_release_v1"
+  },
+  "portfolio_pack": {
+    "evidence_item_count": 8,
+    "release_run_id": "portfolio_release_v1_20260513154530_9e0b357891a7",
+    "section_count": 5,
+    "validation_index_count": 30
+  },
+  "release_run_id": "portfolio_release_v1_20260513154530_9e0b357891a7",
+  "release_status": "not_ready",
+  "repository": {
+    "failure_count": 0,
+    "item_type_counts": {
+      "directory": 8,
+      "file": 13,
+      "make_target": 15,
+      "path": 4
+    },
+    "pass_count": 40,
+    "row_count": 40,
+    "status_counts": {
+      "pass": 40
+    },
+    "warning_count": 0
+  },
+  "summary": {
+    "artefact_check_count": 17,
+    "documentation_check_count": 21,
+    "evidence_item_count": 8,
+    "failed_check_count": 5,
+    "generated_timestamp": "2026-05-13T15:45:30.969347+00:00",
+    "release_run_id": "portfolio_release_v1_20260513154530_9e0b357891a7",
+    "release_version": "portfolio_release_v1",
+    "repository_check_count": 40,
+    "validation_artefact_count": 30,
+    "warning_check_count": 1
+  }
+}

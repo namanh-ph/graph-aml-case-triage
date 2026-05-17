@@ -1,0 +1,52 @@
+neo4j:
+  enabled: true
+  uri_env: NEO4J_URI
+  user_env: NEO4J_USER
+  password_env: NEO4J_PASSWORD
+
+  defaults:
+    uri: bolt://localhost:7687
+    user: neo4j
+    database: neo4j
+
+  connection:
+    max_connection_lifetime_seconds: 3600
+    max_connection_pool_size: 20
+    connection_timeout_seconds: 30
+
+graph:
+  node_labels:
+    customer: Customer
+    account: Account
+    transaction: Transaction
+    counterparty: Counterparty
+    device: Device
+    country: Country
+    alert: Alert
+    case: Case
+
+  relationship_types:
+    owns: OWNS
+    sent: SENT
+    received: RECEIVED
+    paid_to: PAID_TO
+    used_device: USED_DEVICE
+    located_in: LOCATED_IN
+    shares_identifier: SHARES_IDENTIFIER
+    triggers: TRIGGERS
+    included_in: INCLUDED_IN
+    related_to: RELATED_TO
+
+  build:
+    batch_size: 1000
+    reset_before_load: false
+    create_constraints: true
+    create_indexes: true
+
+  analytics:
+    calculate_degree: true
+    calculate_pagerank: true
+    calculate_betweenness: true
+    detect_communities: true
+    detect_cycles: true
+    max_cycle_hops: 4

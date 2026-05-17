@@ -1,0 +1,3169 @@
+{
+  "generated_at": "2026-05-03T23:46:28.575678+00:00",
+  "metadata": {
+    "project_version": "0.1.0",
+    "schema_descriptions": {
+      "aml": "AML alerts, cases, case links, typology outputs, and investigation workflow records.",
+      "governance": "Audit events, model runs, validation reports, lineage, and reproducibility artefacts.",
+      "mart": "Feature tables and analytics-ready outputs for rules, graph features, and models.",
+      "raw": "Unmodified source data loaded from synthetic or external AML datasets.",
+      "staging": "Cleaned, standardised, and relationally consistent operational tables."
+    },
+    "source": "database metadata and curated column catalogue"
+  },
+  "project_name": "graph-aml-case-triage",
+  "tables": [
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.customers_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.customers_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.customers_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.customers_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source customer records stored as JSONB payloads before standardisation.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.customers_raw",
+      "schema_name": "raw",
+      "table_name": "customers_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.accounts_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.accounts_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.accounts_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.accounts_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source account records stored as JSONB payloads before standardisation.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.accounts_raw",
+      "schema_name": "raw",
+      "table_name": "accounts_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.transactions_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.transactions_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.transactions_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.transactions_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Source transaction identifier used to trace payment activity.",
+          "column_name": "transaction_id",
+          "data_type": "TEXT",
+          "description": "Transaction id column for this project table.",
+          "example_value": "TXN_001",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Standardised account that initiated the transaction.",
+          "column_name": "sender_account_id",
+          "data_type": "TEXT",
+          "description": "Sender account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Standardised internal account that received the transaction when present.",
+          "column_name": "receiver_account_id",
+          "data_type": "TEXT",
+          "description": "Receiver account id column for this project table.",
+          "example_value": "ACC_002",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Parsed event time used for temporal rules and feature windows.",
+          "column_name": "transaction_timestamp",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Transaction timestamp column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Positive monetary transaction amount used by rules, features, and scoring.",
+          "column_name": "amount",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Amount column for this project table.",
+          "example_value": "125.50",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Normalised currency code for transaction and account consistency.",
+          "column_name": "currency",
+          "data_type": "TEXT",
+          "description": "Currency column for this project table.",
+          "example_value": "USD",
+          "foreign_key": null,
+          "lineage_source": "raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source transaction records with traceability columns and raw JSONB.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.transactions_raw",
+      "schema_name": "raw",
+      "table_name": "transactions_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.counterparties_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.counterparties_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.counterparties_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.counterparties_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source counterparty records stored as JSONB payloads.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.counterparties_raw",
+      "schema_name": "raw",
+      "table_name": "counterparties_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.countries_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.countries_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.countries_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.countries_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source country and jurisdiction reference records stored as JSONB.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.countries_raw",
+      "schema_name": "raw",
+      "table_name": "countries_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures raw record id for raw.devices_raw.",
+          "column_name": "raw_record_id",
+          "data_type": "BIGSERIAL",
+          "description": "Raw record id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source system for raw.devices_raw.",
+          "column_name": "source_system",
+          "data_type": "TEXT",
+          "description": "Source system column for this project table.",
+          "example_value": "synthetic",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for raw.devices_raw.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ingested at for raw.devices_raw.",
+          "column_name": "ingested_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Ingested at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores the original source record as JSONB for lineage and replay.",
+          "column_name": "raw_payload",
+          "data_type": "JSONB",
+          "description": "Original source record captured as JSONB.",
+          "example_value": "{\"transaction_id\": \"TXN_001\"}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must contain the original source record as a JSON object."
+          ]
+        },
+        {
+          "business_meaning": "Supports lineage, reproducibility, integrity checks, and later deduplication.",
+          "column_name": "record_hash",
+          "data_type": "TEXT",
+          "description": "Deterministic hash of the raw payload.",
+          "example_value": "sha256:...",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Source device and identifier records stored as JSONB payloads.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Raw source capture",
+      "metadata": {},
+      "primary_key": [
+        "raw_record_id"
+      ],
+      "qualified_name": "raw.devices_raw",
+      "schema_name": "raw",
+      "table_name": "devices_raw"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Normalised country code used for jurisdiction and cross-border analysis.",
+          "column_name": "country_code",
+          "data_type": "TEXT",
+          "description": "Country code column for this project table.",
+          "example_value": "AU",
+          "foreign_key": null,
+          "lineage_source": "raw.countries_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures country name for staging.countries.",
+          "column_name": "country_name",
+          "data_type": "TEXT",
+          "description": "Country name column for this project table.",
+          "example_value": "Australia",
+          "foreign_key": null,
+          "lineage_source": "raw.countries_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures region for staging.countries.",
+          "column_name": "region",
+          "data_type": "TEXT",
+          "description": "Region column for this project table.",
+          "example_value": "APAC",
+          "foreign_key": null,
+          "lineage_source": "raw.countries_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures is high risk for staging.countries.",
+          "column_name": "is_high_risk",
+          "data_type": "BOOLEAN",
+          "description": "Is high risk column for this project table.",
+          "example_value": "false",
+          "foreign_key": null,
+          "lineage_source": "raw.countries_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Defaults to false."
+          ]
+        },
+        {
+          "business_meaning": "Captures risk score for staging.countries.",
+          "column_name": "risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Risk score column for this project table.",
+          "example_value": "25.00",
+          "foreign_key": null,
+          "lineage_source": "raw.countries_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be between 0 and 100."
+          ]
+        },
+        {
+          "business_meaning": "Captures created at for staging.countries.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for staging.countries.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised country and jurisdiction risk reference data.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "country_code"
+      ],
+      "qualified_name": "staging.countries",
+      "schema_name": "staging",
+      "table_name": "countries"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures customer id for staging.customers.",
+          "column_name": "customer_id",
+          "data_type": "TEXT",
+          "description": "Customer id column for this project table.",
+          "example_value": "CUST_001",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures customer type for staging.customers.",
+          "column_name": "customer_type",
+          "data_type": "TEXT",
+          "description": "Customer type column for this project table.",
+          "example_value": "individual",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Lowercase standardised type."
+          ]
+        },
+        {
+          "business_meaning": "Captures customer segment for staging.customers.",
+          "column_name": "customer_segment",
+          "data_type": "TEXT",
+          "description": "Customer segment column for this project table.",
+          "example_value": "retail",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures jurisdiction for staging.customers.",
+          "column_name": "jurisdiction",
+          "data_type": "TEXT",
+          "description": "Jurisdiction column for this project table.",
+          "example_value": "AU",
+          "foreign_key": "staging.countries(country_code)",
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures occupation for staging.customers.",
+          "column_name": "occupation",
+          "data_type": "TEXT",
+          "description": "Occupation column for this project table.",
+          "example_value": "engineer",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures industry code for staging.customers.",
+          "column_name": "industry_code",
+          "data_type": "TEXT",
+          "description": "Industry code column for this project table.",
+          "example_value": "5411",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures customer risk rating for staging.customers.",
+          "column_name": "customer_risk_rating",
+          "data_type": "TEXT",
+          "description": "Customer risk rating column for this project table.",
+          "example_value": "medium",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": [
+            "Defaults to low when missing."
+          ]
+        },
+        {
+          "business_meaning": "Captures customer risk score for staging.customers.",
+          "column_name": "customer_risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Customer risk score column for this project table.",
+          "example_value": "42.00",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be between 0 and 100."
+          ]
+        },
+        {
+          "business_meaning": "Captures onboarded at for staging.customers.",
+          "column_name": "onboarded_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Onboarded at column for this project table.",
+          "example_value": "2024-12-01T00:00:00Z",
+          "foreign_key": null,
+          "lineage_source": "raw.customers_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": [
+            "Parsed as timestamp when supplied."
+          ]
+        },
+        {
+          "business_meaning": "Captures created at for staging.customers.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for staging.customers.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised customer profiles and customer risk attributes.",
+      "foreign_keys": [
+        "jurisdiction -> staging.countries(country_code)"
+      ],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "customer_id"
+      ],
+      "qualified_name": "staging.customers",
+      "schema_name": "staging",
+      "table_name": "customers"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures account id for staging.accounts.",
+          "column_name": "account_id",
+          "data_type": "TEXT",
+          "description": "Account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures customer id for staging.accounts.",
+          "column_name": "customer_id",
+          "data_type": "TEXT",
+          "description": "Customer id column for this project table.",
+          "example_value": "CUST_001",
+          "foreign_key": "staging.customers(customer_id)",
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures account type for staging.accounts.",
+          "column_name": "account_type",
+          "data_type": "TEXT",
+          "description": "Account type column for this project table.",
+          "example_value": "current",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures account status for staging.accounts.",
+          "column_name": "account_status",
+          "data_type": "TEXT",
+          "description": "Account status column for this project table.",
+          "example_value": "active",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Defaults to active when missing."
+          ]
+        },
+        {
+          "business_meaning": "Normalised currency code for transaction and account consistency.",
+          "column_name": "currency",
+          "data_type": "TEXT",
+          "description": "Currency column for this project table.",
+          "example_value": "USD",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Uppercase ISO-like currency code."
+          ]
+        },
+        {
+          "business_meaning": "Captures opened at for staging.accounts.",
+          "column_name": "opened_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Opened at column for this project table.",
+          "example_value": "2024-01-01T00:00:00Z",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": [
+            "Parsed as timestamp when supplied."
+          ]
+        },
+        {
+          "business_meaning": "Captures closed at for staging.accounts.",
+          "column_name": "closed_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Closed at column for this project table.",
+          "example_value": "2025-01-01T00:00:00Z",
+          "foreign_key": null,
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures home country for staging.accounts.",
+          "column_name": "home_country",
+          "data_type": "TEXT",
+          "description": "Home country column for this project table.",
+          "example_value": "AU",
+          "foreign_key": "staging.countries(country_code)",
+          "lineage_source": "raw.accounts_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for staging.accounts.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for staging.accounts.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised account records linked to customers and jurisdictions.",
+      "foreign_keys": [
+        "customer_id -> staging.customers(customer_id)",
+        "home_country -> staging.countries(country_code)"
+      ],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "account_id"
+      ],
+      "qualified_name": "staging.accounts",
+      "schema_name": "staging",
+      "table_name": "accounts"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures counterparty id for staging.counterparties.",
+          "column_name": "counterparty_id",
+          "data_type": "TEXT",
+          "description": "Counterparty id column for this project table.",
+          "example_value": "CP_001",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures counterparty type for staging.counterparties.",
+          "column_name": "counterparty_type",
+          "data_type": "TEXT",
+          "description": "Counterparty type column for this project table.",
+          "example_value": "merchant",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures counterparty name for staging.counterparties.",
+          "column_name": "counterparty_name",
+          "data_type": "TEXT",
+          "description": "Counterparty name column for this project table.",
+          "example_value": "Example Merchant",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Normalised country code used for jurisdiction and cross-border analysis.",
+          "column_name": "country_code",
+          "data_type": "TEXT",
+          "description": "Country code column for this project table.",
+          "example_value": "NZ",
+          "foreign_key": "staging.countries(country_code)",
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures institution name for staging.counterparties.",
+          "column_name": "institution_name",
+          "data_type": "TEXT",
+          "description": "Institution name column for this project table.",
+          "example_value": "Example Bank",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures external account ref for staging.counterparties.",
+          "column_name": "external_account_ref",
+          "data_type": "TEXT",
+          "description": "External account ref column for this project table.",
+          "example_value": "EXT-001",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures risk score for staging.counterparties.",
+          "column_name": "risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Risk score column for this project table.",
+          "example_value": "35.00",
+          "foreign_key": null,
+          "lineage_source": "raw.counterparties_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be between 0 and 100."
+          ]
+        },
+        {
+          "business_meaning": "Captures created at for staging.counterparties.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for staging.counterparties.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised external counterparties, merchants, and institutions.",
+      "foreign_keys": [
+        "country_code -> staging.countries(country_code)"
+      ],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "counterparty_id"
+      ],
+      "qualified_name": "staging.counterparties",
+      "schema_name": "staging",
+      "table_name": "counterparties"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures device id for staging.devices.",
+          "column_name": "device_id",
+          "data_type": "TEXT",
+          "description": "Device id column for this project table.",
+          "example_value": "DEV_001",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures device type for staging.devices.",
+          "column_name": "device_type",
+          "data_type": "TEXT",
+          "description": "Device type column for this project table.",
+          "example_value": "mobile",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ip address for staging.devices.",
+          "column_name": "ip_address",
+          "data_type": "TEXT",
+          "description": "Ip address column for this project table.",
+          "example_value": "203.0.113.10",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures ip cluster for staging.devices.",
+          "column_name": "ip_cluster",
+          "data_type": "TEXT",
+          "description": "Ip cluster column for this project table.",
+          "example_value": "203.0.113.0/24",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures phone hash for staging.devices.",
+          "column_name": "phone_hash",
+          "data_type": "TEXT",
+          "description": "Phone hash column for this project table.",
+          "example_value": "hash-phone",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures browser fingerprint for staging.devices.",
+          "column_name": "browser_fingerprint",
+          "data_type": "TEXT",
+          "description": "Browser fingerprint column for this project table.",
+          "example_value": "browser-hash",
+          "foreign_key": null,
+          "lineage_source": "raw.devices_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for staging.devices.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for staging.devices.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised device, IP, phone, and browser identifier records.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "device_id"
+      ],
+      "qualified_name": "staging.devices",
+      "schema_name": "staging",
+      "table_name": "devices"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Source transaction identifier used to trace payment activity.",
+          "column_name": "transaction_id",
+          "data_type": "TEXT",
+          "description": "Transaction id column for this project table.",
+          "example_value": "TXN_001",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Standardised account that initiated the transaction.",
+          "column_name": "sender_account_id",
+          "data_type": "TEXT",
+          "description": "Sender account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Standardised internal account that received the transaction when present.",
+          "column_name": "receiver_account_id",
+          "data_type": "TEXT",
+          "description": "Receiver account id column for this project table.",
+          "example_value": "ACC_002",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures counterparty id for staging.transactions.",
+          "column_name": "counterparty_id",
+          "data_type": "TEXT",
+          "description": "Counterparty id column for this project table.",
+          "example_value": "CP_001",
+          "foreign_key": "staging.counterparties(counterparty_id)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures device id for staging.transactions.",
+          "column_name": "device_id",
+          "data_type": "TEXT",
+          "description": "Device id column for this project table.",
+          "example_value": "DEV_001",
+          "foreign_key": "staging.devices(device_id)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Parsed event time used for temporal rules and feature windows.",
+          "column_name": "transaction_timestamp",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Transaction timestamp column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Parsed timestamp; must be populated."
+          ]
+        },
+        {
+          "business_meaning": "Positive monetary transaction amount used by rules, features, and scoring.",
+          "column_name": "amount",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Amount column for this project table.",
+          "example_value": "125.50",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be greater than 0."
+          ]
+        },
+        {
+          "business_meaning": "Normalised currency code for transaction and account consistency.",
+          "column_name": "currency",
+          "data_type": "TEXT",
+          "description": "Currency column for this project table.",
+          "example_value": "USD",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Uppercase currency code; defaults to USD."
+          ]
+        },
+        {
+          "business_meaning": "Captures transaction type for staging.transactions.",
+          "column_name": "transaction_type",
+          "data_type": "TEXT",
+          "description": "Transaction type column for this project table.",
+          "example_value": "transfer",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures channel for staging.transactions.",
+          "column_name": "channel",
+          "data_type": "TEXT",
+          "description": "Channel column for this project table.",
+          "example_value": "online",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures origin country for staging.transactions.",
+          "column_name": "origin_country",
+          "data_type": "TEXT",
+          "description": "Origin country column for this project table.",
+          "example_value": "AU",
+          "foreign_key": "staging.countries(country_code)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures destination country for staging.transactions.",
+          "column_name": "destination_country",
+          "data_type": "TEXT",
+          "description": "Destination country column for this project table.",
+          "example_value": "NZ",
+          "foreign_key": "staging.countries(country_code)",
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Flag recalculated from origin and destination countries for cross-border typologies.",
+          "column_name": "is_cross_border",
+          "data_type": "BOOLEAN",
+          "description": "Is cross border column for this project table.",
+          "example_value": "true",
+          "foreign_key": null,
+          "lineage_source": "derived from staging.transactions origin and destination",
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Recalculated as origin_country != destination_country."
+          ]
+        },
+        {
+          "business_meaning": "Synthetic scenario label used for validation, rules, and later model evaluation.",
+          "column_name": "is_labelled_suspicious",
+          "data_type": "BOOLEAN",
+          "description": "Is labelled suspicious column for this project table.",
+          "example_value": "false",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": [
+            "Synthetic scenario label when supplied."
+          ]
+        },
+        {
+          "business_meaning": "Suspicious activity typology label from synthetic scenario injection.",
+          "column_name": "typology_label",
+          "data_type": "TEXT",
+          "description": "Typology label column for this project table.",
+          "example_value": "structuring",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures source file for staging.transactions.",
+          "column_name": "source_file",
+          "data_type": "TEXT",
+          "description": "Source file column for this project table.",
+          "example_value": "transactions.csv",
+          "foreign_key": null,
+          "lineage_source": "raw.transactions_raw.source_file or raw_payload",
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for staging.transactions.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Standardised transaction records linked to accounts and evidence entities.",
+      "foreign_keys": [
+        "sender_account_id -> staging.accounts(account_id)",
+        "receiver_account_id -> staging.accounts(account_id)",
+        "counterparty_id -> staging.counterparties(counterparty_id)",
+        "device_id -> staging.devices(device_id)",
+        "origin_country -> staging.countries(country_code)",
+        "destination_country -> staging.countries(country_code)"
+      ],
+      "lifecycle_stage": "Cleaned and standardised relational data",
+      "metadata": {},
+      "primary_key": [
+        "transaction_id"
+      ],
+      "qualified_name": "staging.transactions",
+      "schema_name": "staging",
+      "table_name": "transactions"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures feature id for mart.features_account_daily.",
+          "column_name": "feature_id",
+          "data_type": "BIGSERIAL",
+          "description": "Feature id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures account id for mart.features_account_daily.",
+          "column_name": "account_id",
+          "data_type": "TEXT",
+          "description": "Account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures feature date for mart.features_account_daily.",
+          "column_name": "feature_date",
+          "data_type": "DATE",
+          "description": "Feature date column for this project table.",
+          "example_value": "2025-01-01",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures feature version for mart.features_account_daily.",
+          "column_name": "feature_version",
+          "data_type": "TEXT",
+          "description": "Feature version column for this project table.",
+          "example_value": "features_v1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Unique with account_id and feature_date."
+          ]
+        },
+        {
+          "business_meaning": "Captures txn count 1d for mart.features_account_daily.",
+          "column_name": "txn_count_1d",
+          "data_type": "INTEGER",
+          "description": "Txn count 1d column for this project table.",
+          "example_value": "3",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures txn count 7d for mart.features_account_daily.",
+          "column_name": "txn_count_7d",
+          "data_type": "INTEGER",
+          "description": "Txn count 7d column for this project table.",
+          "example_value": "12",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures total sent 7d for mart.features_account_daily.",
+          "column_name": "total_sent_7d",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Total sent 7d column for this project table.",
+          "example_value": "1500.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures total received 7d for mart.features_account_daily.",
+          "column_name": "total_received_7d",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Total received 7d column for this project table.",
+          "example_value": "900.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures avg txn amount 30d for mart.features_account_daily.",
+          "column_name": "avg_txn_amount_30d",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Avg txn amount 30d column for this project table.",
+          "example_value": "125.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures max txn amount 30d for mart.features_account_daily.",
+          "column_name": "max_txn_amount_30d",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Max txn amount 30d column for this project table.",
+          "example_value": "999.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures unique counterparties 7d for mart.features_account_daily.",
+          "column_name": "unique_counterparties_7d",
+          "data_type": "INTEGER",
+          "description": "Unique counterparties 7d column for this project table.",
+          "example_value": "5",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures in out ratio 7d for mart.features_account_daily.",
+          "column_name": "in_out_ratio_7d",
+          "data_type": "NUMERIC(18, 6)",
+          "description": "In out ratio 7d column for this project table.",
+          "example_value": "1.250000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures retained balance proxy for mart.features_account_daily.",
+          "column_name": "retained_balance_proxy",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Retained balance proxy column for this project table.",
+          "example_value": "600.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures below threshold count 24h for mart.features_account_daily.",
+          "column_name": "below_threshold_count_24h",
+          "data_type": "INTEGER",
+          "description": "Below threshold count 24h column for this project table.",
+          "example_value": "4",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures dormant days before activity for mart.features_account_daily.",
+          "column_name": "dormant_days_before_activity",
+          "data_type": "INTEGER",
+          "description": "Dormant days before activity column for this project table.",
+          "example_value": "120",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures cross border ratio 30d for mart.features_account_daily.",
+          "column_name": "cross_border_ratio_30d",
+          "data_type": "NUMERIC(10, 6)",
+          "description": "Cross border ratio 30d column for this project table.",
+          "example_value": "0.150000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures high risk country exposure for mart.features_account_daily.",
+          "column_name": "high_risk_country_exposure",
+          "data_type": "NUMERIC(10, 6)",
+          "description": "High risk country exposure column for this project table.",
+          "example_value": "0.050000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures counterparty entropy for mart.features_account_daily.",
+          "column_name": "counterparty_entropy",
+          "data_type": "NUMERIC(10, 6)",
+          "description": "Counterparty entropy column for this project table.",
+          "example_value": "1.500000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for mart.features_account_daily.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Daily account-level behavioural features for rules and models.",
+      "foreign_keys": [
+        "account_id -> staging.accounts(account_id)"
+      ],
+      "lifecycle_stage": "Analytics-ready feature data",
+      "metadata": {},
+      "primary_key": [
+        "feature_id"
+      ],
+      "qualified_name": "mart.features_account_daily",
+      "schema_name": "mart",
+      "table_name": "features_account_daily"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures graph feature id for mart.graph_features.",
+          "column_name": "graph_feature_id",
+          "data_type": "BIGSERIAL",
+          "description": "Graph feature id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures account id for mart.graph_features.",
+          "column_name": "account_id",
+          "data_type": "TEXT",
+          "description": "Account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures graph build version for mart.graph_features.",
+          "column_name": "graph_build_version",
+          "data_type": "TEXT",
+          "description": "Graph build version column for this project table.",
+          "example_value": "graph_v1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Unique with account_id and feature_date."
+          ]
+        },
+        {
+          "business_meaning": "Captures feature date for mart.graph_features.",
+          "column_name": "feature_date",
+          "data_type": "DATE",
+          "description": "Feature date column for this project table.",
+          "example_value": "2025-01-01",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures degree centrality for mart.graph_features.",
+          "column_name": "degree_centrality",
+          "data_type": "NUMERIC(18, 10)",
+          "description": "Degree centrality column for this project table.",
+          "example_value": "0.1200000000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures in degree for mart.graph_features.",
+          "column_name": "in_degree",
+          "data_type": "INTEGER",
+          "description": "In degree column for this project table.",
+          "example_value": "5",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures out degree for mart.graph_features.",
+          "column_name": "out_degree",
+          "data_type": "INTEGER",
+          "description": "Out degree column for this project table.",
+          "example_value": "4",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures pagerank score for mart.graph_features.",
+          "column_name": "pagerank_score",
+          "data_type": "NUMERIC(18, 10)",
+          "description": "Pagerank score column for this project table.",
+          "example_value": "0.0012000000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures betweenness centrality for mart.graph_features.",
+          "column_name": "betweenness_centrality",
+          "data_type": "NUMERIC(18, 10)",
+          "description": "Betweenness centrality column for this project table.",
+          "example_value": "0.0300000000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures clustering coefficient for mart.graph_features.",
+          "column_name": "clustering_coefficient",
+          "data_type": "NUMERIC(18, 10)",
+          "description": "Clustering coefficient column for this project table.",
+          "example_value": "0.5000000000",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures community id for mart.graph_features.",
+          "column_name": "community_id",
+          "data_type": "TEXT",
+          "description": "Community id column for this project table.",
+          "example_value": "COMM_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures community size for mart.graph_features.",
+          "column_name": "community_size",
+          "data_type": "INTEGER",
+          "description": "Community size column for this project table.",
+          "example_value": "10",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures cycle count for mart.graph_features.",
+          "column_name": "cycle_count",
+          "data_type": "INTEGER",
+          "description": "Cycle count column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures shortest path to flagged for mart.graph_features.",
+          "column_name": "shortest_path_to_flagged",
+          "data_type": "INTEGER",
+          "description": "Shortest path to flagged column for this project table.",
+          "example_value": "2",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures shared device count for mart.graph_features.",
+          "column_name": "shared_device_count",
+          "data_type": "INTEGER",
+          "description": "Shared device count column for this project table.",
+          "example_value": "3",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures fan in count for mart.graph_features.",
+          "column_name": "fan_in_count",
+          "data_type": "INTEGER",
+          "description": "Fan in count column for this project table.",
+          "example_value": "4",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures fan out count for mart.graph_features.",
+          "column_name": "fan_out_count",
+          "data_type": "INTEGER",
+          "description": "Fan out count column for this project table.",
+          "example_value": "5",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for mart.graph_features.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Account-level graph analytics features from transaction networks.",
+      "foreign_keys": [
+        "account_id -> staging.accounts(account_id)"
+      ],
+      "lifecycle_stage": "Analytics-ready feature data",
+      "metadata": {},
+      "primary_key": [
+        "graph_feature_id"
+      ],
+      "qualified_name": "mart.graph_features",
+      "schema_name": "mart",
+      "table_name": "graph_features"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures alert id for aml.alerts.",
+          "column_name": "alert_id",
+          "data_type": "TEXT",
+          "description": "Alert id column for this project table.",
+          "example_value": "ALERT_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures account id for aml.alerts.",
+          "column_name": "account_id",
+          "data_type": "TEXT",
+          "description": "Account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures customer id for aml.alerts.",
+          "column_name": "customer_id",
+          "data_type": "TEXT",
+          "description": "Customer id column for this project table.",
+          "example_value": "CUST_001",
+          "foreign_key": "staging.customers(customer_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures rule name for aml.alerts.",
+          "column_name": "rule_name",
+          "data_type": "TEXT",
+          "description": "Rule name column for this project table.",
+          "example_value": "Structuring",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures typology for aml.alerts.",
+          "column_name": "typology",
+          "data_type": "TEXT",
+          "description": "Typology column for this project table.",
+          "example_value": "structuring",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures severity for aml.alerts.",
+          "column_name": "severity",
+          "data_type": "TEXT",
+          "description": "Severity column for this project table.",
+          "example_value": "high",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be low, medium, high, or critical."
+          ]
+        },
+        {
+          "business_meaning": "Captures risk score rule for aml.alerts.",
+          "column_name": "risk_score_rule",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Risk score rule column for this project table.",
+          "example_value": "85.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be between 0 and 100."
+          ]
+        },
+        {
+          "business_meaning": "Human-readable reason supporting alert transparency and review.",
+          "column_name": "reason_code",
+          "data_type": "TEXT",
+          "description": "Explanation code for why a rule or model created an alert.",
+          "example_value": "STRUCTURING_BELOW_THRESHOLD",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Links an alert to supporting transactions or entities.",
+          "column_name": "evidence_ids",
+          "data_type": "TEXT[]",
+          "description": "Supporting transaction or entity identifiers for an alert.",
+          "example_value": "{TXN_001,TXN_002}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures detection window start for aml.alerts.",
+          "column_name": "detection_window_start",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Detection window start column for this project table.",
+          "example_value": "2025-01-01T00:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures detection window end for aml.alerts.",
+          "column_name": "detection_window_end",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Detection window end column for this project table.",
+          "example_value": "2025-01-02T00:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Model lineage identifier shared across runs, alerts, and reports.",
+          "column_name": "model_run_id",
+          "data_type": "TEXT",
+          "description": "Model run id column for this project table.",
+          "example_value": "MODEL_RUN_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures alert status for aml.alerts.",
+          "column_name": "alert_status",
+          "data_type": "TEXT",
+          "description": "Alert status column for this project table.",
+          "example_value": "New",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for aml.alerts.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for aml.alerts.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Rule-generated and model-generated AML alerts with evidence references.",
+      "foreign_keys": [
+        "account_id -> staging.accounts(account_id)",
+        "customer_id -> staging.customers(customer_id)"
+      ],
+      "lifecycle_stage": "AML alert, case, and investigation workflow data",
+      "metadata": {},
+      "primary_key": [
+        "alert_id"
+      ],
+      "qualified_name": "aml.alerts",
+      "schema_name": "aml",
+      "table_name": "alerts"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures case id for aml.cases.",
+          "column_name": "case_id",
+          "data_type": "TEXT",
+          "description": "Case id column for this project table.",
+          "example_value": "CASE_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures primary account id for aml.cases.",
+          "column_name": "primary_account_id",
+          "data_type": "TEXT",
+          "description": "Primary account id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": "staging.accounts(account_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures primary customer id for aml.cases.",
+          "column_name": "primary_customer_id",
+          "data_type": "TEXT",
+          "description": "Primary customer id column for this project table.",
+          "example_value": "CUST_001",
+          "foreign_key": "staging.customers(customer_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures typologies for aml.cases.",
+          "column_name": "typologies",
+          "data_type": "TEXT[]",
+          "description": "Typologies column for this project table.",
+          "example_value": "{structuring,fan_in}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures total transaction value for aml.cases.",
+          "column_name": "total_transaction_value",
+          "data_type": "NUMERIC(18, 2)",
+          "description": "Total transaction value column for this project table.",
+          "example_value": "12500.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures rule typology score for aml.cases.",
+          "column_name": "rule_typology_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Rule typology score column for this project table.",
+          "example_value": "80.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures graph risk score for aml.cases.",
+          "column_name": "graph_risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Graph risk score column for this project table.",
+          "example_value": "70.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures anomaly score for aml.cases.",
+          "column_name": "anomaly_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Anomaly score column for this project table.",
+          "example_value": "65.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures customer risk score for aml.cases.",
+          "column_name": "customer_risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Customer risk score column for this project table.",
+          "example_value": "55.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures jurisdiction risk score for aml.cases.",
+          "column_name": "jurisdiction_risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Jurisdiction risk score column for this project table.",
+          "example_value": "40.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Supports investigation prioritisation and queue ordering.",
+          "column_name": "case_risk_score",
+          "data_type": "NUMERIC(5, 2)",
+          "description": "Final composite case risk score used for prioritisation.",
+          "example_value": "82.00",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be between 0 and 100."
+          ]
+        },
+        {
+          "business_meaning": "Captures severity for aml.cases.",
+          "column_name": "severity",
+          "data_type": "TEXT",
+          "description": "Severity column for this project table.",
+          "example_value": "high",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be low, medium, high, or critical."
+          ]
+        },
+        {
+          "business_meaning": "Tracks the human investigation lifecycle.",
+          "column_name": "status",
+          "data_type": "TEXT",
+          "description": "Workflow status for human review and disposition.",
+          "example_value": "New",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": [
+            "Must be a recognised case workflow status."
+          ]
+        },
+        {
+          "business_meaning": "Captures explanation for aml.cases.",
+          "column_name": "explanation",
+          "data_type": "TEXT",
+          "description": "Explanation column for this project table.",
+          "example_value": "Multiple typology signals on account.",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for aml.cases.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures updated at for aml.cases.",
+          "column_name": "updated_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Updated at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Grouped AML investigation cases with composite risk scores and statuses.",
+      "foreign_keys": [
+        "primary_account_id -> staging.accounts(account_id)",
+        "primary_customer_id -> staging.customers(customer_id)"
+      ],
+      "lifecycle_stage": "AML alert, case, and investigation workflow data",
+      "metadata": {},
+      "primary_key": [
+        "case_id"
+      ],
+      "qualified_name": "aml.cases",
+      "schema_name": "aml",
+      "table_name": "cases"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures case id for aml.case_alerts.",
+          "column_name": "case_id",
+          "data_type": "TEXT",
+          "description": "Case id column for this project table.",
+          "example_value": "CASE_001",
+          "foreign_key": "aml.cases(case_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures alert id for aml.case_alerts.",
+          "column_name": "alert_id",
+          "data_type": "TEXT",
+          "description": "Alert id column for this project table.",
+          "example_value": "ALERT_001",
+          "foreign_key": "aml.alerts(alert_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for aml.case_alerts.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Bridge table linking alerts to generated investigation cases.",
+      "foreign_keys": [
+        "case_id -> aml.cases(case_id)",
+        "alert_id -> aml.alerts(alert_id)"
+      ],
+      "lifecycle_stage": "AML alert, case, and investigation workflow data",
+      "metadata": {},
+      "primary_key": [
+        "case_id",
+        "alert_id"
+      ],
+      "qualified_name": "aml.case_alerts",
+      "schema_name": "aml",
+      "table_name": "case_alerts"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Captures case entity id for aml.case_entities.",
+          "column_name": "case_entity_id",
+          "data_type": "BIGSERIAL",
+          "description": "Case entity id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures case id for aml.case_entities.",
+          "column_name": "case_id",
+          "data_type": "TEXT",
+          "description": "Case id column for this project table.",
+          "example_value": "CASE_001",
+          "foreign_key": "aml.cases(case_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures entity type for aml.case_entities.",
+          "column_name": "entity_type",
+          "data_type": "TEXT",
+          "description": "Entity type column for this project table.",
+          "example_value": "account",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures entity id for aml.case_entities.",
+          "column_name": "entity_id",
+          "data_type": "TEXT",
+          "description": "Entity id column for this project table.",
+          "example_value": "ACC_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures relationship type for aml.case_entities.",
+          "column_name": "relationship_type",
+          "data_type": "TEXT",
+          "description": "Relationship type column for this project table.",
+          "example_value": "primary_subject",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for aml.case_entities.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Entities linked to investigation cases with relationship metadata.",
+      "foreign_keys": [
+        "case_id -> aml.cases(case_id)"
+      ],
+      "lifecycle_stage": "AML alert, case, and investigation workflow data",
+      "metadata": {},
+      "primary_key": [
+        "case_entity_id"
+      ],
+      "qualified_name": "aml.case_entities",
+      "schema_name": "aml",
+      "table_name": "case_entities"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Unique audit record for traceability.",
+          "column_name": "audit_event_id",
+          "data_type": "BIGSERIAL",
+          "description": "Audit event id column for this project table.",
+          "example_value": "1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures event timestamp for governance.audit_events.",
+          "column_name": "event_timestamp",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Event timestamp column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Classifies runtime, validation, staging, rule, model, or analyst events.",
+          "column_name": "event_type",
+          "data_type": "TEXT",
+          "description": "Event type column for this project table.",
+          "example_value": "raw_ingestion",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures component for governance.audit_events.",
+          "column_name": "component",
+          "data_type": "TEXT",
+          "description": "Component column for this project table.",
+          "example_value": "ingestion",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures run id for governance.audit_events.",
+          "column_name": "run_id",
+          "data_type": "TEXT",
+          "description": "Run id column for this project table.",
+          "example_value": "RUN_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures pipeline stage for governance.audit_events.",
+          "column_name": "pipeline_stage",
+          "data_type": "TEXT",
+          "description": "Pipeline stage column for this project table.",
+          "example_value": "raw_load",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures entity type for governance.audit_events.",
+          "column_name": "entity_type",
+          "data_type": "TEXT",
+          "description": "Entity type column for this project table.",
+          "example_value": "dataset",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures entity id for governance.audit_events.",
+          "column_name": "entity_id",
+          "data_type": "TEXT",
+          "description": "Entity id column for this project table.",
+          "example_value": "synthetic_scenario_seed_42_scenario_42",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures action for governance.audit_events.",
+          "column_name": "action",
+          "data_type": "TEXT",
+          "description": "Action column for this project table.",
+          "example_value": "load_persisted_dataset_to_raw",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Tracks the human investigation lifecycle.",
+          "column_name": "status",
+          "data_type": "TEXT",
+          "description": "Workflow status for human review and disposition.",
+          "example_value": "completed",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Carries structured audit details for ingestion, validation, staging, models, cases, and analyst actions.",
+          "column_name": "details",
+          "data_type": "JSONB",
+          "description": "Structured JSON details for audit and governance events.",
+          "example_value": "{\"row_counts\": {\"transactions\": 100}}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created by for governance.audit_events.",
+          "column_name": "created_by",
+          "data_type": "TEXT",
+          "description": "Created by column for this project table.",
+          "example_value": "system",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Runtime, pipeline, model, and analyst action audit events.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Audit, model run, validation, and lineage artefacts",
+      "metadata": {},
+      "primary_key": [
+        "audit_event_id"
+      ],
+      "qualified_name": "governance.audit_events",
+      "schema_name": "governance",
+      "table_name": "audit_events"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Model lineage identifier shared across runs, alerts, and reports.",
+          "column_name": "model_run_id",
+          "data_type": "TEXT",
+          "description": "Model run id column for this project table.",
+          "example_value": "MODEL_RUN_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures experiment name for governance.model_runs.",
+          "column_name": "experiment_name",
+          "data_type": "TEXT",
+          "description": "Experiment name column for this project table.",
+          "example_value": "aml_risk_scoring",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures model name for governance.model_runs.",
+          "column_name": "model_name",
+          "data_type": "TEXT",
+          "description": "Model name column for this project table.",
+          "example_value": "isolation_forest",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures model version for governance.model_runs.",
+          "column_name": "model_version",
+          "data_type": "TEXT",
+          "description": "Model version column for this project table.",
+          "example_value": "v1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures model type for governance.model_runs.",
+          "column_name": "model_type",
+          "data_type": "TEXT",
+          "description": "Model type column for this project table.",
+          "example_value": "anomaly_detection",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures feature version for governance.model_runs.",
+          "column_name": "feature_version",
+          "data_type": "TEXT",
+          "description": "Feature version column for this project table.",
+          "example_value": "features_v1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures training start for governance.model_runs.",
+          "column_name": "training_start",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Training start column for this project table.",
+          "example_value": "2025-01-01T10:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures training end for governance.model_runs.",
+          "column_name": "training_end",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Training end column for this project table.",
+          "example_value": "2025-01-01T11:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Records model lineage and reproducible training configuration.",
+          "column_name": "parameters",
+          "data_type": "JSONB",
+          "description": "Model training or scoring parameters captured as JSONB.",
+          "example_value": "{\"n_estimators\": 100}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Stores model risk and validation metrics.",
+          "column_name": "metrics",
+          "data_type": "JSONB",
+          "description": "Model performance and validation metrics captured as JSONB.",
+          "example_value": "{\"precision_at_k\": 0.8}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Location of the persisted model or model artefact.",
+          "column_name": "artefact_uri",
+          "data_type": "TEXT",
+          "description": "Artefact uri column for this project table.",
+          "example_value": "runs:/MODEL_RUN_001/model",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for governance.model_runs.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Model run metadata, parameters, metrics, and artefact references.",
+      "foreign_keys": [],
+      "lifecycle_stage": "Audit, model run, validation, and lineage artefacts",
+      "metadata": {},
+      "primary_key": [
+        "model_run_id"
+      ],
+      "qualified_name": "governance.model_runs",
+      "schema_name": "governance",
+      "table_name": "model_runs"
+    },
+    {
+      "columns": [
+        {
+          "business_meaning": "Unique validation report artefact identifier.",
+          "column_name": "validation_report_id",
+          "data_type": "TEXT",
+          "description": "Validation report id column for this project table.",
+          "example_value": "VR_001",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": true,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures report name for governance.validation_reports.",
+          "column_name": "report_name",
+          "data_type": "TEXT",
+          "description": "Report name column for this project table.",
+          "example_value": "model_validation_report",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures report version for governance.validation_reports.",
+          "column_name": "report_version",
+          "data_type": "TEXT",
+          "description": "Report version column for this project table.",
+          "example_value": "v1",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Model lineage identifier shared across runs, alerts, and reports.",
+          "column_name": "model_run_id",
+          "data_type": "TEXT",
+          "description": "Model run id column for this project table.",
+          "example_value": "MODEL_RUN_001",
+          "foreign_key": "governance.model_runs(model_run_id)",
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": true,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures report path for governance.validation_reports.",
+          "column_name": "report_path",
+          "data_type": "TEXT",
+          "description": "Path to the generated validation or governance report artefact.",
+          "example_value": "reports/model_validation/report.md",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures report type for governance.validation_reports.",
+          "column_name": "report_type",
+          "data_type": "TEXT",
+          "description": "Report type column for this project table.",
+          "example_value": "model_validation",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Structured summary of validation findings and report outcomes.",
+          "column_name": "summary",
+          "data_type": "JSONB",
+          "description": "Summary column for this project table.",
+          "example_value": "{\"passed\": true}",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        },
+        {
+          "business_meaning": "Captures created at for governance.validation_reports.",
+          "column_name": "created_at",
+          "data_type": "TIMESTAMPTZ",
+          "description": "Created at column for this project table.",
+          "example_value": "2025-01-01T12:00:00Z",
+          "foreign_key": null,
+          "lineage_source": null,
+          "metadata": {},
+          "nullable": false,
+          "primary_key": false,
+          "validation_rules": []
+        }
+      ],
+      "description": "Validation report metadata and links to model runs.",
+      "foreign_keys": [
+        "model_run_id -> governance.model_runs(model_run_id)"
+      ],
+      "lifecycle_stage": "Audit, model run, validation, and lineage artefacts",
+      "metadata": {},
+      "primary_key": [
+        "validation_report_id"
+      ],
+      "qualified_name": "governance.validation_reports",
+      "schema_name": "governance",
+      "table_name": "validation_reports"
+    }
+  ],
+  "version": "1.0"
+}

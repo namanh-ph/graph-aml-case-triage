@@ -1,0 +1,19 @@
+project:
+  name: graph-aml-case-triage
+  package_name: graph_aml
+  version: 0.1.0
+  description: Local-first graph-based AML case triage and risk scoring system.
+  environment: local
+  random_seed: 42
+  timezone: UTC
+
+runtime:
+  python_version: "3.12"
+  execution_mode: batch
+  local_first: true
+
+governance:
+  audit_enabled: true
+  model_tracking_enabled: true
+  validation_reports_enabled: true
+  analyst_feedback_enabled: true

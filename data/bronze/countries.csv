@@ -1,0 +1,13 @@
+country_code,country_name,region,is_high_risk,risk_score
+US,United States,North America,false,15.0
+GB,United Kingdom,Europe,false,18.0
+AU,Australia,Oceania,false,12.0
+SG,Singapore,Asia,false,20.0
+HK,Hong Kong,Asia,false,28.0
+CA,Canada,North America,false,14.0
+DE,Germany,Europe,false,16.0
+AE,United Arab Emirates,Middle East,false,36.0
+PA,Panama,Latin America,true,72.0
+VG,British Virgin Islands,Caribbean,true,78.0
+ZA,South Africa,Africa,false,34.0
+BR,Brazil,Latin America,false,32.0

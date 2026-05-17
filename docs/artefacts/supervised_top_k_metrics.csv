@@ -1,0 +1,5 @@
+top_k,row_count,positive_count,precision_at_k,recall_at_k,status
+10,5,3,0.6,1.0,computed
+25,5,3,0.6,1.0,computed
+50,5,3,0.6,1.0,computed
+100,5,3,0.6,1.0,computed

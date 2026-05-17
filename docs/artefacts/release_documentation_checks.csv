@@ -1,0 +1,22 @@
+release_run_id,document_path,check_name,required_section,status,severity,details,metadata
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/aml_typologies.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/developer_workflow.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/governance_framework.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/graph_model.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/model_validation.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/rule_engine.md,required_document_exists,,pass,info,{'exists': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Project overview,warning,medium,"{'found': False, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Local setup,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,End-to-end local demo,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Dashboard,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Validation,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Governance,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,README.md,required_section_present,Security controls,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,project purpose,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,local-first architecture,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,dashboard pages,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,validation artefacts,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,known limitations,pass,info,"{'found': True, 'document_exists': True}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,docs/portfolio_walkthrough.md,required_section_present,future extensions,pass,info,"{'found': True, 'document_exists': True}",{}

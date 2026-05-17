@@ -1,0 +1,66 @@
+postgres:
+  enabled: true
+  driver: postgresql+psycopg2
+  host_env: POSTGRES_HOST
+  port_env: POSTGRES_PORT
+  database_env: POSTGRES_DB
+  user_env: POSTGRES_USER
+  password_env: POSTGRES_PASSWORD
+
+  defaults:
+    host: localhost
+    port: 5432
+    database: graph_aml
+    user: graph_aml_user
+
+  pool:
+    pool_size: 5
+    max_overflow: 10
+    pool_timeout_seconds: 30
+    pool_recycle_seconds: 1800
+
+schemas:
+  raw: raw
+  staging: staging
+  mart: mart
+  aml: aml
+  governance: governance
+
+tables:
+  raw:
+    transactions: transactions_raw
+    customers: customers_raw
+    accounts: accounts_raw
+    counterparties: counterparties_raw
+    countries: countries_raw
+    devices: devices_raw
+
+  staging:
+    transactions: transactions
+    customers: customers
+    accounts: accounts
+    counterparties: counterparties
+    countries: countries
+    devices: devices
+
+  mart:
+    features_account_daily: features_account_daily
+    graph_features: graph_features
+    account_anomaly_scores: account_anomaly_scores
+    account_risk_scores: account_risk_scores
+
+  aml:
+    alerts: alerts
+    cases: cases
+    case_alerts: case_alerts
+    case_entities: case_entities
+    case_risk_scores: case_risk_scores
+    case_evidence_packs: case_evidence_packs
+    case_explanations: case_explanations
+    case_lifecycle_events: case_lifecycle_events
+    case_assignments: case_assignments
+
+  governance:
+    audit_events: audit_events
+    model_runs: model_runs
+    validation_reports: validation_reports

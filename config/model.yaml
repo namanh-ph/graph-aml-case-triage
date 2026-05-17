@@ -1,0 +1,382 @@
+model:
+  enabled: true
+  random_seed: 42
+  model_registry_name: graph_aml_risk_model
+  experiment_name: graph_aml_case_triage
+
+mlflow:
+  tracking_uri_env: MLFLOW_TRACKING_URI
+  default_tracking_uri: mlruns
+
+features:
+  account_features:
+    - txn_count_1d
+    - txn_count_7d
+    - total_sent_7d
+    - total_received_7d
+    - avg_txn_amount_30d
+    - max_txn_amount_30d
+    - unique_counterparties_7d
+    - in_out_ratio_7d
+    - retained_balance_proxy
+    - below_threshold_count_24h
+    - dormant_days_before_activity
+    - cross_border_ratio_30d
+    - high_risk_country_exposure
+    - counterparty_entropy
+
+  graph_features:
+    - degree_centrality
+    - in_degree
+    - out_degree
+    - pagerank_score
+    - betweenness_centrality
+    - clustering_coefficient
+    - community_size
+    - cycle_count
+    - shortest_path_to_flagged
+    - shared_device_count
+    - fan_in_count
+    - fan_out_count
+
+isolation_forest:
+  enabled: true
+  model_name: account_isolation_forest
+  model_version: isolation_forest_v1
+  random_state: 42
+  n_estimators: 200
+  contamination: 0.05
+  max_samples: auto
+  max_features: 1.0
+  bootstrap: false
+  n_jobs: -1
+  score_percentile_high: 95
+  score_percentile_medium: 80
+  feature_date: null
+  account_feature_version: null
+  graph_feature_version: null
+  graph_build_id: null
+  use_graph_features: true
+  use_behavioural_features: true
+  use_jurisdiction_features: true
+  imputation_strategy: median
+  scaling_strategy: standard
+  min_training_rows: 20
+  mlflow_enabled: true
+  mlflow_experiment_name: graph_aml_anomaly_scoring
+  artefact_output_dir: reports/model_validation
+
+supervised_baselines:
+  logistic_regression:
+    enabled: false
+    class_weight: balanced
+    max_iter: 1000
+
+  random_forest:
+    enabled: false
+    n_estimators: 300
+    max_depth: 8
+    class_weight: balanced
+    random_state: 42
+
+evaluation:
+  primary_metric: precision_at_k
+  k_values:
+    - 10
+    - 25
+    - 50
+    - 100
+  secondary_metrics:
+    - recall_at_k
+    - pr_auc
+    - roc_auc
+    - f1
+  train_validation_split:
+    method: time_based
+    validation_fraction: 0.2
+
+supervised:
+  enabled: true
+  model_family: logistic_regression
+  model_name: supervised_aml_baseline
+  model_version: supervised_aml_baseline_v1
+  random_seed: 42
+
+  dataset:
+    level: case
+    dataset_version: supervised_readiness_v1
+    label_column: case_label
+    id_column: case_id
+    timestamp_column: label_timestamp
+    min_rows: 10
+    min_positive_labels: 1
+    min_negative_labels: 1
+    allow_single_class_training: false
+
+  split:
+    strategy: time
+    validation_fraction: 0.25
+    min_validation_rows: 5
+
+  preprocessing:
+    numeric_imputation: median
+    standardise_numeric: true
+    drop_constant_features: true
+    drop_high_missing_features: true
+    high_missing_threshold: 0.95
+
+  logistic_regression:
+    enabled: true
+    penalty: l2
+    C: 1.0
+    class_weight: balanced
+    max_iter: 1000
+
+  random_forest:
+    enabled: true
+    n_estimators: 200
+    max_depth: null
+    min_samples_leaf: 1
+    class_weight: balanced
+    n_jobs: -1
+
+  evaluation:
+    top_k_values:
+      - 10
+      - 25
+      - 50
+      - 100
+    threshold_grid:
+      - 0.10
+      - 0.20
+      - 0.30
+      - 0.40
+      - 0.50
+      - 0.60
+      - 0.70
+      - 0.80
+      - 0.90
+    primary_metric: precision_at_k
+    primary_top_k: 25
+
+  persistence:
+    persist_scores: true
+    write_model_artifact: true
+    write_mlflow: true
+    artefact_output_dir: reports/model_validation
+
+model_comparison:
+  enabled: true
+  comparison_name: aml_model_comparison
+  comparison_version: aml_model_comparison_v1
+
+  entity_level: case
+  label_version: analyst_feedback_v1
+  dataset_version: supervised_readiness_v1
+
+  candidate_scores:
+    case_risk_score:
+      enabled: true
+      source_table: aml.case_risk_scores
+      score_column: case_risk_score
+      rank_column: risk_rank
+      score_scale: 100
+    supervised_score:
+      enabled: true
+      source_table: mart.supervised_model_scores
+      score_column: supervised_score
+      rank_column: risk_rank
+      score_scale: 1
+    account_risk_score:
+      enabled: false
+      source_table: mart.account_risk_scores
+      score_column: account_risk_score
+      rank_column: risk_rank
+      score_scale: 100
+    anomaly_score:
+      enabled: false
+      source_table: mart.account_anomaly_scores
+      score_column: anomaly_score
+      rank_column: null
+      score_scale: 1
+
+  evaluation:
+    top_k_values:
+      - 10
+      - 25
+      - 50
+      - 100
+    threshold_grid:
+      - 0.10
+      - 0.20
+      - 0.30
+      - 0.40
+      - 0.50
+      - 0.60
+      - 0.70
+      - 0.80
+      - 0.90
+    operating_metric: precision_at_k
+    operating_top_k: 25
+    min_precision: 0.50
+    min_recall: 0.10
+    prefer_lower_review_volume: true
+
+  champion:
+    selection_metric: precision_at_k
+    selection_top_k: 25
+    tie_breakers:
+      - recall_at_k
+      - pr_auc
+      - lower_review_volume
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation
+
+explainability:
+  enabled: true
+  explanation_name: aml_explainability
+  explanation_version: aml_explainability_v1
+
+  entity_level: case
+  model_version: supervised_aml_baseline_v1
+  dataset_version: supervised_readiness_v1
+  comparison_version: aml_model_comparison_v1
+  monitoring_version: aml_monitoring_v1
+
+  supervised_attribution:
+    enabled: true
+    method: coefficient
+    max_features: 50
+    include_global_importance: true
+    include_local_contributions: true
+    top_local_features: 10
+
+  composite_score_decomposition:
+    enabled: true
+    include_case_risk_score: true
+    include_account_risk_score: true
+    include_component_weights: true
+    top_components: 10
+
+  reason_contributions:
+    enabled: true
+    max_entities: 1000
+    top_reasons: 10
+    include_rule_reasons: true
+    include_graph_reasons: true
+    include_anomaly_reasons: true
+    include_supervised_reasons: true
+    include_label_context: true
+
+  model_card:
+    enabled: true
+    output_filename: consolidated_model_card.md
+    include_project_context: true
+    include_data_summary: true
+    include_label_summary: true
+    include_model_summary: true
+    include_model_comparison: true
+    include_threshold_recommendations: true
+    include_monitoring_summary: true
+    include_limitations: true
+    include_next_steps: true
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation
+
+monitoring:
+  enabled: true
+  monitoring_name: aml_monitoring
+  monitoring_version: aml_monitoring_v1
+
+  entity_level: case
+  timestamp_column: score_date
+
+  windows:
+    baseline_window_days: 30
+    comparison_window_days: 30
+    min_baseline_rows: 10
+    min_comparison_rows: 10
+    rolling_window_days:
+      - 7
+      - 30
+      - 60
+
+  drift:
+    numeric_metrics:
+      - psi
+      - ks_statistic
+      - mean_shift
+      - median_shift
+    categorical_metrics:
+      - distribution_shift
+    psi_thresholds:
+      low: 0.10
+      medium: 0.20
+      high: 0.30
+    ks_thresholds:
+      low: 0.10
+      medium: 0.20
+      high: 0.30
+    mean_shift_threshold: 0.25
+
+  score_monitoring:
+    score_columns:
+      - case_risk_score
+      - supervised_score
+      - anomaly_score
+      - account_risk_score
+    score_band_column: risk_band
+    rank_column: risk_rank
+    top_k_values:
+      - 10
+      - 25
+      - 50
+      - 100
+
+  volume_monitoring:
+    alert_count_warning_ratio: 0.50
+    alert_count_critical_ratio: 1.00
+    case_count_warning_ratio: 0.50
+    case_count_critical_ratio: 1.00
+    high_risk_share_warning_delta: 0.15
+    high_risk_share_critical_delta: 0.30
+
+  segment_monitoring:
+    enabled: true
+    segment_columns:
+      - customer_segment
+      - jurisdiction
+      - risk_band
+      - typology
+      - rule_name
+    min_segment_rows: 5
+    include_label_metrics: true
+    include_score_metrics: true
+    include_volume_metrics: true
+
+  backtesting:
+    enabled: true
+    time_grain: monthly
+    min_windows: 2
+    metrics:
+      - precision_at_k
+      - recall_at_k
+      - alert_count
+      - case_count
+      - positive_rate
+      - high_risk_share
+    top_k: 25
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation

@@ -1,0 +1,23 @@
+paths:
+  root: .
+  config_dir: config
+  data_dir: data
+  dataset_dir: data
+  external_data_dir: data/external
+  docs_dir: docs
+  reports_dir: reports
+  model_validation_dir: reports/model_validation
+  notebooks_dir: notebooks
+  app_dir: app
+  streamlit_pages_dir: app/pages
+  source_dir: src
+  package_dir: src/graph_aml
+  tests_dir: tests
+  logs_dir: logs
+  mlruns_dir: mlruns
+
+files:
+  env_example: .env.example
+  readme: README.md
+  pyproject: pyproject.toml
+  streamlit_entrypoint: app/streamlit_app.py

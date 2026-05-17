@@ -1,0 +1,160 @@
+security_controls:
+  enabled: true
+  security_name: aml_security_controls
+  security_version: security_controls_v1
+
+  sensitive_fields:
+    default_classification: internal
+    classifications:
+      - public
+      - internal
+      - confidential
+      - restricted
+    restricted_patterns:
+      - customer_name
+      - full_name
+      - email
+      - phone
+      - address
+      - date_of_birth
+      - national_id
+      - tax_id
+      - ip_address
+      - device_id
+      - account_number
+    confidential_patterns:
+      - customer_id
+      - account_id
+      - counterparty_id
+      - transaction_id
+      - case_id
+      - alert_id
+
+  masking:
+    enabled: true
+    default_strategy: hash
+    salt_env_var: AML_MASKING_SALT
+    fallback_salt: local_dev_salt
+    strategies:
+      customer_id: hash
+      account_id: hash
+      counterparty_id: hash
+      transaction_id: preserve_last_4
+      case_id: preserve_last_4
+      alert_id: preserve_last_4
+      email: redact
+      phone: redact
+      address: redact
+      device_id: hash
+      ip_address: redact
+    null_token: null
+    redaction_token: "[REDACTED]"
+
+  permissions:
+    enabled: true
+    default_role: analyst
+    roles:
+      viewer:
+        allowed_actions:
+          - read_dashboard
+          - export_sanitised
+          - read_validation_reports
+      analyst:
+        allowed_actions:
+          - read_dashboard
+          - export_sanitised
+          - read_validation_reports
+          - case_comment
+          - case_assign
+          - case_status_change
+      senior_analyst:
+        allowed_actions:
+          - read_dashboard
+          - export_sanitised
+          - export_sensitive
+          - read_validation_reports
+          - case_comment
+          - case_assign
+          - case_status_change
+          - case_close
+          - case_archive
+      governance_reviewer:
+        allowed_actions:
+          - read_dashboard
+          - export_sanitised
+          - read_validation_reports
+          - read_audit_log
+          - read_governance_inventory
+      admin:
+        allowed_actions:
+          - "*"
+    protected_actions:
+      - case_close
+      - case_archive
+      - export_sensitive
+      - read_audit_log
+      - read_governance_inventory
+
+  export_controls:
+    enabled: true
+    default_export_mode: sanitised
+    allow_sensitive_exports: false
+    require_role_for_sensitive_export: senior_analyst
+    max_export_rows: 10000
+    blocked_columns:
+      - raw_payload
+      - metadata_raw
+      - secret
+      - password
+      - token
+      - api_key
+
+  secrets_scan:
+    enabled: true
+    root_dirs:
+      - config
+      - scripts
+      - src
+      - docs
+    allowed_extensions:
+      - .py
+      - .yaml
+      - .yml
+      - .toml
+      - .md
+      - .env
+      - .example
+    max_file_size_mb: 5
+    secret_patterns:
+      - name: generic_api_key
+        regex: "(?i)(api[_-]?key|secret|token|password)\\s*[:=]\\s*['\\\"]?[A-Za-z0-9_\\-]{16,}"
+      - name: postgres_url
+        regex: "(?i)postgres(ql)?://[^\\s]+"
+      - name: neo4j_password
+        regex: "(?i)neo4j.*password\\s*[:=]\\s*['\\\"]?[^\\s'\\\"]+"
+    allowlist_patterns:
+      - ".env.example"
+      - "fallback_salt"
+      - "local_dev"
+
+  audit_integrity:
+    enabled: true
+    required_columns:
+      - event_type
+      - component
+      - action
+      - status
+      - created_at
+    duplicate_check_columns:
+      - event_type
+      - component
+      - action
+      - run_id
+      - created_at
+    require_success_or_failure_status: true
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation

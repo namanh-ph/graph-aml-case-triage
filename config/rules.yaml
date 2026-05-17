@@ -1,0 +1,136 @@
+rules:
+  enabled: true
+  default_currency: USD
+  default_timezone: UTC
+
+  severity_bands:
+    low:
+      min_score: 0
+      max_score: 39
+    medium:
+      min_score: 40
+      max_score: 69
+    high:
+      min_score: 70
+      max_score: 89
+    critical:
+      min_score: 90
+      max_score: 100
+
+  structuring:
+    enabled: true
+    rule_name: Structuring
+    typology: structuring
+    reporting_threshold: 10000.0
+    below_threshold_margin: 0.90
+    min_transaction_count: 8
+    window_hours: 24
+    severity: high
+    base_risk_score: 80.0
+    high_count_risk_score: 90.0
+    high_count_multiplier: 1.5
+    transaction_types:
+      - transfer
+      - wire
+    include_counterparty_payments: true
+
+  fan_in:
+    enabled: true
+    rule_name: Fan-in
+    typology: fan_in
+    min_unique_senders: 15
+    window_days: 7
+    severity: high
+    base_risk_score: 80.0
+    high_sender_risk_score: 90.0
+    high_sender_multiplier: 1.5
+    min_total_amount: 0.0
+    transaction_types:
+      - transfer
+      - wire
+    include_internal_account_receipts: true
+
+  fan_out:
+    enabled: true
+    rule_name: Fan-out
+    typology: fan_out
+    min_unique_recipients: 20
+    window_days: 7
+    severity: high
+    base_risk_score: 80.0
+    high_recipient_risk_score: 90.0
+    high_recipient_multiplier: 1.5
+    min_total_amount: 0.0
+    transaction_types:
+      - transfer
+      - wire
+    include_counterparties: true
+    include_internal_accounts: true
+
+  rapid_movement:
+    enabled: true
+    rule_name: Rapid movement
+    typology: rapid_movement
+    outflow_window_hours: 48
+    min_total_received: 1000.0
+    min_outflow_ratio: 0.90
+    max_retained_ratio: 0.10
+    min_outgoing_transaction_count: 1
+    severity: high
+    base_risk_score: 80.0
+    high_ratio_risk_score: 90.0
+    high_ratio_threshold: 0.98
+    inbound_transaction_types:
+      - transfer
+      - wire
+      - cash_deposit
+    outbound_transaction_types:
+      - transfer
+      - wire
+      - cash_withdrawal
+    include_counterparty_outflows: true
+    include_internal_account_outflows: true
+
+  circular_flow:
+    enabled: true
+    rule_name: Circular flow
+    typology: circular_flow
+    detection:
+      max_cycle_hops: 4
+      min_cycle_hops: 2
+      min_total_amount: 0.0
+      max_time_span_hours: 168
+      transaction_types:
+        - transfer
+        - wire
+      include_counterparty_edges: false
+      include_self_loops: false
+      max_cycles_per_account: 3
+      max_total_cycles: 500
+    alert:
+      severity: high
+      base_risk_score: 85.0
+      high_amount_risk_score: 90.0
+      high_amount_threshold: 50000.0
+      long_cycle_risk_score: 90.0
+      long_cycle_hop_threshold: 4
+
+  dormant_reactivation:
+    enabled: true
+    rule_name: Dormant reactivation
+    typology: dormant_reactivation
+    dormant_days_threshold: 120
+    reactivation_window_days: 7
+    min_outbound_amount: 10000.0
+    min_total_outbound_amount: 10000.0
+    min_outbound_transaction_count: 1
+    severity: high
+    base_risk_score: 80.0
+    high_value_risk_score: 90.0
+    high_value_multiplier: 2.0
+    outbound_transaction_types:
+      - transfer
+      - wire
+      - cash_withdrawal
+    include_counterparty_outflows: true
+    include_internal_account_outflows: true

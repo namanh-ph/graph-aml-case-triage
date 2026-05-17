@@ -1,0 +1,71 @@
+demo:
+  name: local_full_aml_demo
+  version: demo_v1
+  description: Local end-to-end AML analytics demo using reference data
+  default_dataset_size: small
+  require_explicit_reset: true
+  require_services_running: true
+  write_readiness_report: true
+  write_artefact_index: true
+  artefact_output_dir: reports/model_validation
+
+steps:
+  full_pipeline:
+    - db_health
+    - graph_health
+    - generate_data
+    - validate_data
+    - load_data
+    - stage_data
+    - run_rules
+    - graph_load
+    - graph_features
+    - model_scores
+    - account_risk_scores
+    - cases_generate
+    - case_risk_scores
+    - case_evidence
+    - dashboard_health
+    - dashboard_summary
+    - validation_index
+
+commands:
+  db_reset: "make db-reset"
+  db_health: "python scripts/db.py health"
+  graph_health: "python scripts/graph.py health"
+  generate_data: "make generate-data-scenarios-small"
+  validate_data: "make validate-data-strict"
+  load_data: "make load-data-scenarios"
+  stage_data: "make stage-data"
+  run_rules: "make run-aml-rules-persist"
+  graph_load: "make graph-load"
+  graph_features: "make graph-features-persist"
+  model_scores: "make model-isolation-forest-persist"
+  account_risk_scores: "make account-risk-score-persist"
+  cases_generate: "make cases-generate-persist"
+  case_risk_scores: "make case-risk-score-persist"
+  case_evidence: "make case-evidence-build-persist"
+  dashboard_health: "make dashboard-health"
+  dashboard_summary: "make dashboard-summary"
+  validation_index: "make dashboard-validation-index"
+
+validation_thresholds:
+  min_transactions: 1
+  min_accounts: 1
+  min_alerts: 1
+  min_cases: 1
+  min_case_risk_scores: 1
+  min_case_evidence_packs: 1
+  min_audit_events: 1
+  min_validation_files: 1
+
+safety:
+  destructive_steps:
+    - db_reset
+  blocked_without_flag:
+    - make db-reset
+    - python scripts/db.py reset
+  forbidden_demo_commands:
+    - rm -rf
+    - DROP DATABASE
+    - docker system prune

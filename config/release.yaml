@@ -1,0 +1,123 @@
+release_readiness:
+  enabled: true
+  release_name: aml_portfolio_release
+  release_version: portfolio_release_v1
+
+  repository:
+    required_files:
+      - README.md
+      - pyproject.toml
+      - Makefile
+      - docker-compose.yml
+      - .env.example
+      - config/database.yaml
+      - config/graph.yaml
+      - config/model.yaml
+      - config/scoring.yaml
+      - config/dashboard.yaml
+      - config/demo.yaml
+      - config/governance.yaml
+      - config/security.yaml
+    required_directories:
+      - app
+      - app/pages
+      - config
+      - docs
+      - reports/model_validation
+      - scripts
+      - src/graph_aml
+      - tests
+    forbidden_paths:
+      - .env
+      - data/raw/real
+      - data/private
+      - secrets
+    required_make_targets:
+      - test
+      - check
+      - services-up
+      - services-down
+      - demo-readiness
+      - demo-run-dry
+      - demo-run
+      - dashboard
+      - labels-build-persist
+      - model-supervised-train-persist
+      - model-comparison-run-persist
+      - monitoring-run-persist
+      - explainability-run-persist
+      - governance-inventory-run-persist
+      - security-controls-run-persist
+
+  documentation:
+    required_docs:
+      - README.md
+      - docs/developer_workflow.md
+      - docs/governance_framework.md
+      - docs/model_validation.md
+      - docs/portfolio_walkthrough.md
+      - docs/graph_model.md
+      - docs/aml_typologies.md
+      - docs/rule_engine.md
+    required_sections:
+      README.md:
+        - Project overview
+        - Local setup
+        - End-to-end local demo
+        - Dashboard
+        - Validation
+        - Governance
+        - Security controls
+      docs/portfolio_walkthrough.md:
+        - project purpose
+        - local-first architecture
+        - dashboard pages
+        - validation artefacts
+        - known limitations
+        - future extensions
+
+  artefacts:
+    report_dir: reports/model_validation
+    required_files:
+      - dataset_summary.md
+      - feature_dictionary.md
+      - validation_methodology.md
+      - model_card.md
+      - consolidated_model_card.md
+      - model_comparison_report.md
+      - drift_monitoring_report.md
+      - governance_inventory_report.md
+      - security_control_report.md
+    optional_files:
+      - supervised_model_card.md
+      - graph_analytics_report.md
+      - threshold_recommendations.csv
+      - champion_challenger_results.csv
+      - monitoring_summary.json
+      - explainability_summary.json
+      - governance_inventory_summary.json
+      - security_control_summary.json
+    allowed_extensions:
+      - .md
+      - .json
+      - .csv
+      - .txt
+      - .yaml
+      - .yml
+    max_file_size_mb: 25
+
+  evidence_pack:
+    output_dir: reports/model_validation/release_pack
+    include_command_transcript_template: true
+    include_dashboard_walkthrough: true
+    include_portfolio_summary: true
+    include_architecture_summary: true
+    include_validation_index: true
+    include_known_limitations: true
+    include_next_steps: true
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation

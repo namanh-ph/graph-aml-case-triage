@@ -1,0 +1,166 @@
+governance_inventory:
+  enabled: true
+  inventory_name: aml_governance_inventory
+  inventory_version: governance_inventory_v1
+
+  include:
+    database_tables: true
+    audit_events: true
+    model_runs: true
+    supervised_model_runs: true
+    model_comparison_runs: true
+    monitoring_runs: true
+    explainability_runs: true
+    dashboard_artefacts: true
+    validation_artefacts: true
+    documentation_files: true
+
+  lineage:
+    include_table_lineage: true
+    include_process_lineage: true
+    include_run_dependencies: true
+    include_column_level_notes: false
+    max_dependency_depth: 5
+
+  artefacts:
+    root_dirs:
+      - reports/model_validation
+      - docs
+    allowed_extensions:
+      - .md
+      - .json
+      - .csv
+      - .txt
+      - .yaml
+      - .yml
+    max_file_size_mb: 25
+    hash_algorithm: sha256
+
+  known_processes:
+    ingestion:
+      inputs:
+        - data/raw
+      outputs:
+        - raw.*
+        - staging.transactions
+        - staging.accounts
+    validation:
+      inputs:
+        - raw.*
+      outputs:
+        - governance.audit_events
+    rules:
+      inputs:
+        - staging.transactions
+        - staging.accounts
+      outputs:
+        - aml.alerts
+    graph:
+      inputs:
+        - staging.transactions
+        - aml.alerts
+      outputs:
+        - mart.graph_features
+    anomaly_model:
+      inputs:
+        - mart.account_features
+        - mart.graph_features
+      outputs:
+        - mart.account_anomaly_scores
+    account_risk_scoring:
+      inputs:
+        - aml.alerts
+        - mart.graph_features
+        - mart.account_anomaly_scores
+      outputs:
+        - mart.account_risk_scores
+    case_generation:
+      inputs:
+        - aml.alerts
+        - mart.account_risk_scores
+        - mart.graph_features
+      outputs:
+        - aml.cases
+        - aml.case_alerts
+        - aml.case_entities
+    case_risk_scoring:
+      inputs:
+        - aml.cases
+        - aml.alerts
+        - mart.account_risk_scores
+      outputs:
+        - aml.case_risk_scores
+    case_evidence:
+      inputs:
+        - aml.cases
+        - aml.alerts
+        - staging.transactions
+        - aml.case_risk_scores
+      outputs:
+        - aml.case_evidence_packs
+        - aml.case_explanations
+    lifecycle:
+      inputs:
+        - aml.cases
+      outputs:
+        - aml.case_lifecycle_events
+        - aml.case_assignments
+    labels:
+      inputs:
+        - aml.case_lifecycle_events
+        - aml.cases
+        - aml.case_entities
+      outputs:
+        - aml.case_labels
+        - aml.account_labels
+        - mart.case_supervised_dataset
+        - mart.account_supervised_dataset
+    supervised_model:
+      inputs:
+        - mart.case_supervised_dataset
+        - mart.account_supervised_dataset
+      outputs:
+        - mart.supervised_model_scores
+        - governance.supervised_model_runs
+    model_comparison:
+      inputs:
+        - aml.case_labels
+        - mart.supervised_model_scores
+        - aml.case_risk_scores
+      outputs:
+        - governance.model_comparison_runs
+        - governance.model_comparison_metrics
+        - governance.threshold_recommendations
+        - governance.champion_challenger_results
+    monitoring:
+      inputs:
+        - aml.cases
+        - aml.alerts
+        - aml.case_risk_scores
+        - mart.supervised_model_scores
+      outputs:
+        - governance.monitoring_runs
+        - governance.drift_metrics
+        - governance.score_monitoring_metrics
+        - governance.volume_monitoring_metrics
+        - governance.segment_monitoring_metrics
+        - governance.backtesting_metrics
+    explainability:
+      inputs:
+        - governance.supervised_model_runs
+        - governance.model_comparison_runs
+        - governance.monitoring_runs
+        - aml.case_evidence_packs
+      outputs:
+        - governance.explainability_runs
+        - governance.global_feature_importance
+        - governance.local_feature_contributions
+        - governance.score_decomposition
+        - governance.reason_contributions
+        - governance.model_cards
+
+  persistence:
+    write_database: true
+    write_artefacts: true
+    write_audit: true
+    artefact_output_dir: reports/model_validation

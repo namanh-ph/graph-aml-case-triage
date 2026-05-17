@@ -1,0 +1,1167 @@
+[
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify repeated below-threshold outbound transfers designed to avoid currency transaction reporting thresholds.",
+    "detection_logic": "Multiple outbound transfers below the reporting threshold are grouped by account inside a rolling 24-hour window by default. Candidate evidence is retained when the count threshold is met.",
+    "evidence": [
+      {
+        "description": "Transaction IDs for below-threshold transfers inside the detection window.",
+        "evidence_type": "transaction_ids",
+        "example": "TXN_STR_001, TXN_STR_002, TXN_STR_003",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "transaction_timestamp",
+          "amount"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_STRUCTURING_001",
+      "alert_id": "ALERT_STRUCTURING_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_STRUCTURING_001",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "8 transfers below threshold within 24 hours",
+      "risk_score_rule": 80.0,
+      "rule_name": "Structuring",
+      "severity": "high",
+      "typology": "structuring",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "An account sends eight 9,500 USD transfers to external counterparties within 24 hours.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "Threshold calibration depends on jurisdiction.",
+        "mitigation": "Tune thresholds by market, product, and local reporting obligation."
+      },
+      {
+        "limitation": "Cash deposits and transfers may need different thresholds in a real system.",
+        "mitigation": "Split typology variants or add channel-specific parameters later."
+      },
+      {
+        "limitation": "Synthetic data may produce cleaner patterns than production banking data.",
+        "mitigation": "Validate against noisy production-like backtests before deployment."
+      }
+    ],
+    "operational_notes": [
+      "Review account type and expected cash activity before analyst escalation.",
+      "Repeated false positives should feed jurisdiction-specific threshold tuning."
+    ],
+    "reason_code_format": "8 transfers below threshold within 24 hours",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "counterparty_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "structuring",
+    "rule_name": "Structuring",
+    "scoring_logic": "Use the base rule score unless the transfer count reaches the configured high-count multiplier, then use the high-count score.",
+    "thresholds": [
+      {
+        "config_path": "rules.structuring.reporting_threshold",
+        "default_value": 10000.0,
+        "description": "Upper reporting amount.",
+        "name": "reporting_threshold",
+        "rationale": "Upper reporting amount. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.below_threshold_margin",
+        "default_value": 0.9,
+        "description": "Below-threshold band.",
+        "name": "below_threshold_margin",
+        "rationale": "Below-threshold band. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.min_transaction_count",
+        "default_value": 8,
+        "description": "Minimum transfers.",
+        "name": "min_transaction_count",
+        "rationale": "Minimum transfers. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.window_hours",
+        "default_value": 24,
+        "description": "Rolling detection window.",
+        "name": "window_hours",
+        "rationale": "Rolling detection window. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.detection.transaction_types",
+        "default_value": [
+          "transfer",
+          "wire"
+        ],
+        "description": "Eligible transaction types.",
+        "name": "transaction_types",
+        "rationale": "Eligible transaction types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.include_counterparty_payments",
+        "default_value": true,
+        "description": "Whether counterparty payments are candidates.",
+        "name": "include_counterparty_payments",
+        "rationale": "Whether counterparty payments are candidates. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.base_risk_score",
+        "default_value": 80.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.high_count_risk_score",
+        "default_value": 90.0,
+        "description": "Elevated count score.",
+        "name": "high_count_risk_score",
+        "rationale": "Elevated count score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.structuring.high_count_multiplier",
+        "default_value": 1.5,
+        "description": "High-count multiplier.",
+        "name": "high_count_multiplier",
+        "rationale": "High-count multiplier. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "structuring",
+    "validation_tests": [
+      "tests/test_structuring_rule.py",
+      "tests/test_structuring_rule_fixtures_thresholds.py",
+      "tests/test_structuring_rule_scenario_alignment.py"
+    ]
+  },
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify collection accounts receiving funds from many unique senders.",
+    "detection_logic": "Many unique sender accounts transfer into one receiving account within a rolling seven-day window by default.",
+    "evidence": [
+      {
+        "description": "Transaction IDs from sender accounts into the receiving account.",
+        "evidence_type": "transaction_ids",
+        "example": "TXN_FI_001, TXN_FI_002",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "receiver_account_id"
+        ]
+      },
+      {
+        "description": "Unique sending account IDs used to support the sender-count threshold.",
+        "evidence_type": "sender_ids",
+        "example": "ACC_SRC_001, ACC_SRC_002",
+        "source_columns": [
+          "sender_account_id"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_COLLECTION_001",
+      "alert_id": "ALERT_FAN_IN_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_COLLECTION_001",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "15 unique senders within 7 days",
+      "risk_score_rule": 80.0,
+      "rule_name": "Fan-in",
+      "severity": "high",
+      "typology": "fan_in",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "A receiving account collects transfers from 15 unrelated senders in 7 days.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "High-volume merchant accounts may produce benign fan-in patterns.",
+        "mitigation": "Incorporate merchant, charity, and platform-account segment context."
+      },
+      {
+        "limitation": "Customer segment and account type should be incorporated in later tuning.",
+        "mitigation": "Use profile and feature tables for segment-aware suppression."
+      },
+      {
+        "limitation": "Duplicate senders should not inflate unique sender counts.",
+        "mitigation": "Continue using canonical sender account IDs and identity resolution."
+      }
+    ],
+    "operational_notes": [
+      "Compare sender geographies and customer relationships during review.",
+      "Monitor merchant-account false positives separately from personal accounts."
+    ],
+    "reason_code_format": "15 unique senders within 7 days",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "receiver_account_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "fan_in",
+    "rule_name": "Fan-in",
+    "scoring_logic": "Use the base score unless unique sender count reaches the configured multiplier, then use the high-sender score.",
+    "thresholds": [
+      {
+        "config_path": "rules.fan_in.min_unique_senders",
+        "default_value": 15,
+        "description": "Minimum unique senders.",
+        "name": "min_unique_senders",
+        "rationale": "Minimum unique senders. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.window_days",
+        "default_value": 7,
+        "description": "Rolling detection window.",
+        "name": "window_days",
+        "rationale": "Rolling detection window. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.detection.min_total_amount",
+        "default_value": 0.0,
+        "description": "Minimum total received value.",
+        "name": "min_total_amount",
+        "rationale": "Minimum total received value. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.detection.transaction_types",
+        "default_value": [
+          "transfer",
+          "wire"
+        ],
+        "description": "Eligible transaction types.",
+        "name": "transaction_types",
+        "rationale": "Eligible transaction types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.include_internal_account_receipts",
+        "default_value": true,
+        "description": "Whether internal account receipts qualify.",
+        "name": "include_internal_account_receipts",
+        "rationale": "Whether internal account receipts qualify. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.base_risk_score",
+        "default_value": 80.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.high_sender_risk_score",
+        "default_value": 90.0,
+        "description": "Elevated sender score.",
+        "name": "high_sender_risk_score",
+        "rationale": "Elevated sender score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_in.high_sender_multiplier",
+        "default_value": 1.5,
+        "description": "High-sender multiplier.",
+        "name": "high_sender_multiplier",
+        "rationale": "High-sender multiplier. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "fan_in",
+    "validation_tests": [
+      "tests/test_fan_in_rule.py",
+      "tests/test_fan_in_rule_fixtures.py",
+      "tests/test_fan_flow_rule_separation.py"
+    ]
+  },
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify dispersion accounts sending funds to many unique recipients.",
+    "detection_logic": "One sending account transfers to many unique recipients within a rolling seven-day window by default.",
+    "evidence": [
+      {
+        "description": "Transaction IDs from sending account to distinct recipient accounts or counterparties.",
+        "evidence_type": "transaction_ids",
+        "example": "TXN_FO_001, TXN_FO_002",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "receiver_account_id",
+          "counterparty_id"
+        ]
+      },
+      {
+        "description": "Recipient keys derived from receiver account IDs or counterparty IDs.",
+        "evidence_type": "recipient_ids",
+        "example": "ACC_RECIPIENT_001, CP_EXT_001",
+        "source_columns": [
+          "receiver_account_id",
+          "counterparty_id"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_DISPERSION_001",
+      "alert_id": "ALERT_FAN_OUT_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_DISPERSION_001",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "20 unique recipients within 7 days",
+      "risk_score_rule": 80.0,
+      "rule_name": "Fan-out",
+      "severity": "high",
+      "typology": "fan_out",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "A sending account distributes funds to 20 recipients over one week.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "Payroll or marketplace payout accounts may produce benign fan-out patterns.",
+        "mitigation": "Use account purpose and customer segment controls in later tuning."
+      },
+      {
+        "limitation": "Counterparty quality and customer segment should be reviewed in later versions.",
+        "mitigation": "Join risk-rated counterparty and customer profile features when available."
+      },
+      {
+        "limitation": "Recipient identity resolution may affect unique recipient counts.",
+        "mitigation": "Improve recipient entity resolution before production deployment."
+      }
+    ],
+    "operational_notes": [
+      "Validate whether the account has expected payout or payroll activity.",
+      "Review recipient clustering and repeated recipient names where available."
+    ],
+    "reason_code_format": "20 unique recipients within 7 days",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "receiver_account_id",
+      "counterparty_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "fan_out",
+    "rule_name": "Fan-out",
+    "scoring_logic": "Use the base score unless unique recipient count reaches the configured multiplier, then use the high-recipient score.",
+    "thresholds": [
+      {
+        "config_path": "rules.fan_out.min_unique_recipients",
+        "default_value": 20,
+        "description": "Minimum recipients.",
+        "name": "min_unique_recipients",
+        "rationale": "Minimum recipients. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.window_days",
+        "default_value": 7,
+        "description": "Rolling detection window.",
+        "name": "window_days",
+        "rationale": "Rolling detection window. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.detection.min_total_amount",
+        "default_value": 0.0,
+        "description": "Minimum total sent value.",
+        "name": "min_total_amount",
+        "rationale": "Minimum total sent value. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.detection.transaction_types",
+        "default_value": [
+          "transfer",
+          "wire"
+        ],
+        "description": "Eligible transaction types.",
+        "name": "transaction_types",
+        "rationale": "Eligible transaction types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.include_counterparties",
+        "default_value": true,
+        "description": "Include external recipients.",
+        "name": "include_counterparties",
+        "rationale": "Include external recipients. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.include_internal_accounts",
+        "default_value": true,
+        "description": "Include internal recipients.",
+        "name": "include_internal_accounts",
+        "rationale": "Include internal recipients. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.base_risk_score",
+        "default_value": 80.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.high_recipient_risk_score",
+        "default_value": 90.0,
+        "description": "Elevated recipient score.",
+        "name": "high_recipient_risk_score",
+        "rationale": "Elevated recipient score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.fan_out.high_recipient_multiplier",
+        "default_value": 1.5,
+        "description": "High-recipient multiplier.",
+        "name": "high_recipient_multiplier",
+        "rationale": "High-recipient multiplier. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "fan_out",
+    "validation_tests": [
+      "tests/test_fan_out_rule.py",
+      "tests/test_fan_out_rule_fixtures.py",
+      "tests/test_fan_flow_counterparty_handling.py"
+    ]
+  },
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify pass-through accounts where incoming funds quickly leave the account.",
+    "detection_logic": "Aggregate inbound value and outbound value inside a configurable outflow window, then flag high outflow ratio and low retained value.",
+    "evidence": [
+      {
+        "description": "Inbound transaction IDs inside the pass-through detection window.",
+        "evidence_type": "inbound_transaction_ids",
+        "example": "TXN_RM_IN_001",
+        "source_columns": [
+          "transaction_id",
+          "receiver_account_id",
+          "amount"
+        ]
+      },
+      {
+        "description": "Outbound transaction IDs following the inbound activity inside the same window.",
+        "evidence_type": "outbound_transaction_ids",
+        "example": "TXN_RM_OUT_001",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "receiver_account_id",
+          "counterparty_id"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_PASS_THROUGH_001",
+      "alert_id": "ALERT_RAPID_MOVEMENT_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_PASS_THROUGH_001",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "90 percent of received value sent out within 48 hours",
+      "risk_score_rule": 80.0,
+      "rule_name": "Rapid movement",
+      "severity": "high",
+      "typology": "rapid_movement",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "An account receives 10,000 USD and sends out 9,200 USD within 48 hours.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "Legitimate settlement accounts can have high pass-through ratios.",
+        "mitigation": "Add product, account purpose, and customer segment context."
+      },
+      {
+        "limitation": "Balance data would improve retained-value interpretation.",
+        "mitigation": "Incorporate balance snapshots or available-balance features later."
+      },
+      {
+        "limitation": "Time-zone and business-day handling should be reviewed before production use.",
+        "mitigation": "Align timestamp handling to operational calendars and branch jurisdictions."
+      }
+    ],
+    "operational_notes": [
+      "Review inbound source and outbound destination relationship before escalation.",
+      "Segment settlement-like accounts separately during threshold tuning."
+    ],
+    "reason_code_format": "90 percent of received value sent out within 48 hours",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "receiver_account_id",
+      "counterparty_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "rapid_movement",
+    "rule_name": "Rapid movement",
+    "scoring_logic": "Use the base score for standard detections and the high-ratio score when the outflow ratio reaches the configured high-ratio threshold.",
+    "thresholds": [
+      {
+        "config_path": "rules.rapid_movement.outflow_window_hours",
+        "default_value": 48,
+        "description": "Pass-through window.",
+        "name": "outflow_window_hours",
+        "rationale": "Pass-through window. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.min_total_received",
+        "default_value": 1000.0,
+        "description": "Minimum inbound value.",
+        "name": "min_total_received",
+        "rationale": "Minimum inbound value. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.min_outflow_ratio",
+        "default_value": 0.9,
+        "description": "Minimum outbound ratio.",
+        "name": "min_outflow_ratio",
+        "rationale": "Minimum outbound ratio. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.max_retained_ratio",
+        "default_value": 0.1,
+        "description": "Maximum retained ratio.",
+        "name": "max_retained_ratio",
+        "rationale": "Maximum retained ratio. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.min_outgoing_transaction_count",
+        "default_value": 1,
+        "description": "Minimum outgoing transaction count.",
+        "name": "min_outgoing_transaction_count",
+        "rationale": "Minimum outgoing transaction count. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.inbound_transaction_types",
+        "default_value": [
+          "transfer",
+          "wire",
+          "cash_deposit"
+        ],
+        "description": "Inbound types.",
+        "name": "inbound_transaction_types",
+        "rationale": "Inbound types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.outbound_transaction_types",
+        "default_value": [
+          "transfer",
+          "wire",
+          "cash_withdrawal"
+        ],
+        "description": "Outbound types.",
+        "name": "outbound_transaction_types",
+        "rationale": "Outbound types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.include_counterparty_outflows",
+        "default_value": true,
+        "description": "Include external counterparty outflows.",
+        "name": "include_counterparty_outflows",
+        "rationale": "Include external counterparty outflows. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.include_internal_account_outflows",
+        "default_value": true,
+        "description": "Include internal account outflows.",
+        "name": "include_internal_account_outflows",
+        "rationale": "Include internal account outflows. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.base_risk_score",
+        "default_value": 80.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.high_ratio_risk_score",
+        "default_value": 90.0,
+        "description": "Elevated ratio score.",
+        "name": "high_ratio_risk_score",
+        "rationale": "Elevated ratio score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.rapid_movement.high_ratio_threshold",
+        "default_value": 0.98,
+        "description": "High-ratio threshold.",
+        "name": "high_ratio_threshold",
+        "rationale": "High-ratio threshold. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "rapid_movement",
+    "validation_tests": [
+      "tests/test_rapid_movement_rule.py",
+      "tests/test_rapid_movement_window_detection.py",
+      "tests/test_movement_dormancy_rapid_thresholds.py"
+    ]
+  },
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify long-inactive accounts that suddenly resume high-value outbound activity.",
+    "detection_logic": "Find prior account activity, measure dormant days, then aggregate qualifying outbound reactivation transactions inside the reactivation window.",
+    "evidence": [
+      {
+        "description": "Prior activity transaction ID establishing observable account history.",
+        "evidence_type": "prior_activity_transaction_id",
+        "example": "TXN_DR_PRIOR_001",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "receiver_account_id"
+        ]
+      },
+      {
+        "description": "Outbound reactivation transaction IDs inside the reactivation window.",
+        "evidence_type": "reactivation_outbound_transaction_ids",
+        "example": "TXN_DR_REACT_001",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "amount"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_DORMANT_001",
+      "alert_id": "ALERT_DORMANT_REACTIVATION_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_DORMANT_001",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "120 inactive days followed by 10000.00 outbound value within 7 days",
+      "risk_score_rule": 80.0,
+      "rule_name": "Dormant reactivation",
+      "severity": "high",
+      "typology": "dormant_reactivation",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "An account has no activity for 120 days, then sends 10,000 USD outbound within 7 days.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "New accounts without observable history should not be treated as dormant by default.",
+        "mitigation": "Require prior activity evidence before triggering."
+      },
+      {
+        "limitation": "Seasonal accounts can reactivate legitimately.",
+        "mitigation": "Add customer profile, seasonality, and account-purpose review."
+      },
+      {
+        "limitation": "Account status and customer profile context should be added later.",
+        "mitigation": "Join staged account status and future customer risk features."
+      }
+    ],
+    "operational_notes": [
+      "Analysts should verify whether the account was closed, dormant, or simply seasonal.",
+      "Review account takeover signals when rapid outbound activity appears after dormancy."
+    ],
+    "reason_code_format": "120 inactive days followed by 10000.00 outbound value within 7 days",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "receiver_account_id",
+      "counterparty_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "dormant_reactivation",
+    "rule_name": "Dormant reactivation",
+    "scoring_logic": "Use the base score unless total outbound amount reaches the configured high-value multiplier, then use the high-value score.",
+    "thresholds": [
+      {
+        "config_path": "rules.dormant_reactivation.dormant_days_threshold",
+        "default_value": 120,
+        "description": "Dormancy period.",
+        "name": "dormant_days_threshold",
+        "rationale": "Dormancy period. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.reactivation_window_days",
+        "default_value": 7,
+        "description": "Reactivation window.",
+        "name": "reactivation_window_days",
+        "rationale": "Reactivation window. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.min_outbound_amount",
+        "default_value": 10000.0,
+        "description": "Minimum outbound amount.",
+        "name": "min_outbound_amount",
+        "rationale": "Minimum outbound amount. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.min_total_outbound_amount",
+        "default_value": 10000.0,
+        "description": "Minimum total outbound amount.",
+        "name": "min_total_outbound_amount",
+        "rationale": "Minimum total outbound amount. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.min_outbound_transaction_count",
+        "default_value": 1,
+        "description": "Minimum outbound count.",
+        "name": "min_outbound_transaction_count",
+        "rationale": "Minimum outbound count. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.outbound_transaction_types",
+        "default_value": [
+          "transfer",
+          "wire",
+          "cash_withdrawal"
+        ],
+        "description": "Outbound types.",
+        "name": "outbound_transaction_types",
+        "rationale": "Outbound types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.include_counterparty_outflows",
+        "default_value": true,
+        "description": "Include external counterparty outflows.",
+        "name": "include_counterparty_outflows",
+        "rationale": "Include external counterparty outflows. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.include_internal_account_outflows",
+        "default_value": true,
+        "description": "Include internal account outflows.",
+        "name": "include_internal_account_outflows",
+        "rationale": "Include internal account outflows. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.base_risk_score",
+        "default_value": 80.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.high_value_risk_score",
+        "default_value": 90.0,
+        "description": "High-value score.",
+        "name": "high_value_risk_score",
+        "rationale": "High-value score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.dormant_reactivation.high_value_multiplier",
+        "default_value": 2.0,
+        "description": "High-value multiplier.",
+        "name": "high_value_multiplier",
+        "rationale": "High-value multiplier. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "dormant_reactivation",
+    "validation_tests": [
+      "tests/test_dormant_reactivation_rule.py",
+      "tests/test_dormant_reactivation_window_detection.py",
+      "tests/test_movement_dormancy_dormant_thresholds.py"
+    ]
+  },
+  {
+    "alert_fields": [
+      "alert_id",
+      "account_id",
+      "customer_id",
+      "rule_name",
+      "typology",
+      "severity",
+      "risk_score_rule",
+      "reason_code",
+      "evidence_ids",
+      "detection_window_start",
+      "detection_window_end",
+      "model_run_id",
+      "alert_status",
+      "created_at",
+      "updated_at"
+    ],
+    "business_purpose": "Identify funds returning near the origin through directed transaction cycles.",
+    "detection_logic": "Construct a directed account transaction graph, detect simple cycles within a configurable hop limit, select transaction evidence, then convert detections into AlertRecord outputs.",
+    "evidence": [
+      {
+        "description": "Transaction IDs along the directed cycle path.",
+        "evidence_type": "cycle_transaction_ids",
+        "example": "TXN_CF_001, TXN_CF_002, TXN_CF_003, TXN_CF_004",
+        "source_columns": [
+          "transaction_id",
+          "sender_account_id",
+          "receiver_account_id"
+        ]
+      },
+      {
+        "description": "Canonical directed account path used for analyst review.",
+        "evidence_type": "cycle_path",
+        "example": "ACC_A -> ACC_B -> ACC_C -> ACC_A",
+        "source_columns": [
+          "sender_account_id",
+          "receiver_account_id"
+        ]
+      }
+    ],
+    "example_alert": {
+      "account_id": "ACC_CF_A",
+      "alert_id": "ALERT_CIRCULAR_FLOW_EXAMPLE",
+      "alert_status": "New",
+      "created_at": "2025-01-01T00:00:00+00:00",
+      "customer_id": "CUST_ACC_CF_A",
+      "detection_window_end": "2025-01-01T23:59:59+00:00",
+      "detection_window_start": "2025-01-01T00:00:00+00:00",
+      "evidence_ids": [
+        "TXN_EXAMPLE_001",
+        "TXN_EXAMPLE_002"
+      ],
+      "model_run_id": null,
+      "reason_code": "4-account circular flow with 25000.00 total value over 36.0 hours",
+      "risk_score_rule": 85.0,
+      "rule_name": "Circular flow",
+      "severity": "high",
+      "typology": "circular_flow",
+      "updated_at": "2025-01-01T00:00:00+00:00"
+    },
+    "example_scenario": "Four accounts transfer value around a directed loop and return funds near the origin within 36 hours.",
+    "input_tables": [
+      "staging.transactions",
+      "staging.accounts"
+    ],
+    "limitations": [
+      {
+        "limitation": "Cycle detection over synthetic data may be cleaner than production flow networks.",
+        "mitigation": "Backtest against noisy transaction networks before production deployment."
+      },
+      {
+        "limitation": "Multi-edge transaction evidence may require additional analyst summarisation.",
+        "mitigation": "Add graph evidence summaries and rollups in later documentation artefacts."
+      },
+      {
+        "limitation": "Neo4j graph evidence and community context will be added later.",
+        "mitigation": "Integrate graph database paths and community metrics in future tickets."
+      }
+    ],
+    "operational_notes": [
+      "Review whether cycle participants share customers, devices, or counterparties.",
+      "Use detection artefacts to explain cycle path and transaction evidence."
+    ],
+    "reason_code_format": "4-account circular flow with 25000.00 total value over 36.0 hours",
+    "required_columns": [
+      "transaction_id",
+      "sender_account_id",
+      "receiver_account_id",
+      "counterparty_id",
+      "transaction_timestamp",
+      "amount",
+      "transaction_type"
+    ],
+    "rule_key": "circular_flow",
+    "rule_name": "Circular flow",
+    "scoring_logic": "Use the base score by default, the high-amount score when total cycle value reaches the high-amount threshold, and the long-cycle score when cycle length reaches the long-cycle hop threshold. If multiple elevated conditions apply, use the maximum score.",
+    "thresholds": [
+      {
+        "config_path": "rules.circular_flow.detection.max_cycle_hops",
+        "default_value": 4,
+        "description": "Maximum cycle length.",
+        "name": "max_cycle_hops",
+        "rationale": "Maximum cycle length. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.min_cycle_hops",
+        "default_value": 2,
+        "description": "Minimum cycle length.",
+        "name": "min_cycle_hops",
+        "rationale": "Minimum cycle length. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.min_total_amount",
+        "default_value": 0.0,
+        "description": "Minimum cycle value.",
+        "name": "min_total_amount",
+        "rationale": "Minimum cycle value. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.max_time_span_hours",
+        "default_value": 168,
+        "description": "Maximum cycle time span.",
+        "name": "max_time_span_hours",
+        "rationale": "Maximum cycle time span. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.transaction_types",
+        "default_value": [
+          "transfer",
+          "wire"
+        ],
+        "description": "Eligible transaction types.",
+        "name": "transaction_types",
+        "rationale": "Eligible transaction types. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.include_counterparty_edges",
+        "default_value": false,
+        "description": "Include counterparty edges.",
+        "name": "include_counterparty_edges",
+        "rationale": "Include counterparty edges. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.include_self_loops",
+        "default_value": false,
+        "description": "Include self-loop edges.",
+        "name": "include_self_loops",
+        "rationale": "Include self-loop edges. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.max_cycles_per_account",
+        "default_value": 3,
+        "description": "Per-account cycle cap.",
+        "name": "max_cycles_per_account",
+        "rationale": "Per-account cycle cap. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.detection.max_total_cycles",
+        "default_value": 500,
+        "description": "Total cycle cap.",
+        "name": "max_total_cycles",
+        "rationale": "Total cycle cap. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.severity",
+        "default_value": "high",
+        "description": "Alert severity.",
+        "name": "severity",
+        "rationale": "Alert severity. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.base_risk_score",
+        "default_value": 85.0,
+        "description": "Standard alert score.",
+        "name": "base_risk_score",
+        "rationale": "Standard alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.high_amount_risk_score",
+        "default_value": 90.0,
+        "description": "High-amount alert score.",
+        "name": "high_amount_risk_score",
+        "rationale": "High-amount alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.high_amount_threshold",
+        "default_value": 50000.0,
+        "description": "High-amount score threshold.",
+        "name": "high_amount_threshold",
+        "rationale": "High-amount score threshold. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.long_cycle_risk_score",
+        "default_value": 90.0,
+        "description": "Long-cycle alert score.",
+        "name": "long_cycle_risk_score",
+        "rationale": "Long-cycle alert score. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      },
+      {
+        "config_path": "rules.circular_flow.alert.long_cycle_hop_threshold",
+        "default_value": 4,
+        "description": "Long-cycle hop threshold.",
+        "name": "long_cycle_hop_threshold",
+        "rationale": "Long-cycle hop threshold. controls deterministic candidate selection or scoring.",
+        "tuning_guidance": "Tune using historical alert review, scenario fixtures, and false-positive analysis."
+      }
+    ],
+    "typology": "circular_flow",
+    "validation_tests": [
+      "tests/test_circular_flow_detection.py",
+      "tests/test_circular_flow_alerts.py",
+      "tests/test_circular_flow_rule.py"
+    ]
+  }
+]

@@ -1,0 +1,152 @@
+[project]
+name = "graph-aml"
+version = "0.1.0"
+description = "Local-first graph-based AML case triage and risk scoring system."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Graph AML Contributors" }]
+license = { text = "MIT" }
+keywords = ["aml", "financial-crime", "graph-analytics", "risk-scoring", "case-triage"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "duckdb>=1.5.2",
+    "duckdb-engine>=0.17.0",
+    "dvc>=3.67.1",
+    "mlflow",
+    "neo4j",
+    "networkx",
+    "numpy",
+    "pandas",
+    "pandera",
+    "plotly",
+    "polars",
+    "psycopg2-binary",
+    "pyarrow>=23.0.1",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "python-louvain",
+    "pyvis",
+    "pyyaml",
+    "scikit-learn",
+    "sqlalchemy",
+    "streamlit",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pandas-stubs",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "types-PyYAML",
+]
+ml-optional = [
+    "shap",
+    "xgboost",
+]
+notebooks = [
+    "ipykernel",
+    "jupyter",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/graph_aml"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/README.md",
+    "/pyproject.toml",
+    "/src",
+    "/tests",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "app", "tests"]
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "data",
+    "notebooks",
+    "reports",
+]
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP", "W"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["graph_aml"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+files = ["src/graph_aml"]
+exclude = [
+    "^data/",
+    "^notebooks/",
+    "^reports/",
+    "^app/.streamlit/",
+]
+ignore_missing_imports = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+]
+pythonpath = ["src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+markers = [
+    "integration: tests that require external services such as PostgreSQL or Neo4j",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src/graph_aml"]
+omit = [
+    "tests/*",
+    "notebooks/*",
+    "reports/*",
+    "data/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]

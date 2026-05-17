@@ -1,0 +1,31 @@
+release_run_id,artefact_name,relative_path,artefact_type,required,status,size_bytes,modified_at,details,metadata
+portfolio_release_v1_20260513154530_9e0b357891a7,consolidated_model_card.md,consolidated_model_card.md,model_card,True,fail,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,dataset_summary.md,dataset_summary.md,data_documentation,True,pass,9899.0,2026-05-04T00:15:31.242344618,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,drift_monitoring_report.md,drift_monitoring_report.md,monitoring,True,fail,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,feature_dictionary.md,feature_dictionary.md,data_documentation,True,pass,47163.0,2026-05-03T23:46:28.582924604,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,governance_inventory_report.md,governance_inventory_report.md,governance,True,fail,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,model_card.md,model_card.md,model_card,True,pass,170.0,2026-04-29T03:51:28.772140503,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,model_comparison_report.md,model_comparison_report.md,model_validation,True,fail,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,security_control_report.md,security_control_report.md,security,True,fail,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,validation_methodology.md,validation_methodology.md,documentation,True,pass,173.0,2026-04-29T03:51:28.768140316,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,champion_challenger_results.csv,champion_challenger_results.csv,model_validation,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,explainability_summary.json,explainability_summary.json,metrics,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,governance_inventory_summary.json,governance_inventory_summary.json,governance,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,graph_analytics_report.md,graph_analytics_report.md,documentation,False,pass,160.0,2026-04-29T03:51:28.771139860,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,monitoring_summary.json,monitoring_summary.json,monitoring,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,security_control_summary.json,security_control_summary.json,security,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,supervised_model_card.md,supervised_model_card.md,model_card,False,pass,1084.0,2026-05-13T01:59:56.847376585,"{'exists': True, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,threshold_recommendations.csv,threshold_recommendations.csv,model_validation,False,not_applicable,,,"{'exists': False, 'oversized': False}",{}
+portfolio_release_v1_20260513154530_9e0b357891a7,aml_rule_documentation.json,aml_rule_documentation.json,metrics,False,pass,51515.0,2026-05-06T08:16:31.014987707,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,data_dictionary.csv,data_dictionary.csv,dataset_export,False,pass,51234.0,2026-05-03T23:46:28.642930269,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,data_dictionary.json,data_dictionary.json,metrics,False,pass,120135.0,2026-05-03T23:46:28.596923351,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,dataset_summary.csv,dataset_summary.csv,data_documentation,False,pass,13052.0,2026-05-04T00:15:31.255401133,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,dataset_summary.json,dataset_summary.json,data_documentation,False,pass,13930.0,2026-05-04T00:15:31.244858742,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,drift_monitoring_plan.md,drift_monitoring_plan.md,monitoring,False,pass,174.0,2026-04-29T03:51:28.771139860,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,performance_metrics.md,performance_metrics.md,documentation,False,pass,176.0,2026-04-29T03:51:28.768140316,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,segment_analysis.md,segment_analysis.md,documentation,False,pass,159.0,2026-04-29T03:51:28.770139694,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,supervised_model_metrics.json,supervised_model_metrics.json,metrics,False,pass,4852.0,2026-05-13T01:59:56.816365004,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,supervised_model_scores.csv,supervised_model_scores.csv,dataset_export,False,pass,3155.0,2026-05-13T01:59:56.806360722,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,supervised_threshold_metrics.csv,supervised_threshold_metrics.csv,model_validation,False,pass,496.0,2026-05-13T01:59:56.819362402,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,supervised_top_k_metrics.csv,supervised_top_k_metrics.csv,dataset_export,False,pass,167.0,2026-05-13T01:59:56.822361946,{'indexed': True},{}
+portfolio_release_v1_20260513154530_9e0b357891a7,threshold_selection.md,threshold_selection.md,model_validation,False,pass,143.0,2026-04-29T03:51:28.769140482,{'indexed': True},{}

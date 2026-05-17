@@ -1,0 +1,175 @@
+dashboard:
+  enabled: true
+  app_title: Graph-Based AML Case Triage
+  title: Graph-Based AML Case Triage
+  page_icon: "🕵️"
+  layout: wide
+  initial_sidebar_state: expanded
+  default_page_size: 50
+  max_page_size: 500
+  default_case_statuses:
+    - New
+    - In review
+    - Escalated
+    - Information requested
+  default_risk_bands:
+    - high
+    - critical
+  default_alert_severities:
+    - high
+    - critical
+  show_debug_panels: false
+  enable_lifecycle_actions: true
+  enable_case_evidence_preview: true
+  enable_download_buttons: true
+  refresh_button: true
+
+pages:
+  overview:
+    enabled: true
+    title: Overview
+    route: /Overview
+  alert_queue:
+    enabled: true
+    title: Alert Queue
+    route: /Alert_Queue
+  case_queue:
+    enabled: true
+    title: Case Queue
+    route: /Case_Queue
+  case_detail:
+    enabled: true
+    title: Case Detail
+    route: /Case_Detail
+  graph_view:
+    enabled: true
+    title: Graph View
+    route: /Graph_View
+  account_profile:
+    enabled: true
+    title: Account Profile
+    route: /Account_Profile
+  model_metrics:
+    enabled: true
+    title: Model Metrics
+    route: /Model_Metrics
+  audit_log:
+    enabled: true
+    title: Audit Log
+    route: /Audit_Log
+  validation_report:
+    enabled: true
+    title: Validation Report
+    route: /Validation_Report
+
+tables:
+  default_page_size: 50
+  max_page_size: 500
+
+charts:
+  risk_score_bins: 20
+  default_time_granularity: day
+  graph_max_nodes: 250
+  graph_max_edges: 500
+
+filters:
+  severity:
+    - high
+    - critical
+  case_status:
+    - New
+    - In review
+    - Escalated
+    - Information requested
+
+triage:
+  case_queue_default_sort: risk_rank
+  alert_queue_default_sort: risk_score_rule
+  case_detail_max_alerts: 100
+  case_detail_max_transactions: 100
+  case_detail_max_lifecycle_events: 100
+  case_detail_max_evidence_bullets: 20
+
+formatting:
+  currency: AUD
+  score_decimals: 2
+  amount_decimals: 2
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+
+graph_view:
+  enabled: true
+  default_layout: spring
+  max_nodes: 150
+  max_edges: 300
+  max_hops: 2
+  include_transactions: true
+  include_alerts: true
+  include_cases: true
+  include_counterparties: true
+  include_communities: true
+  render_engine: pyvis
+  risk_node_size_min: 12
+  risk_node_size_max: 42
+  show_legend: true
+
+account_profile:
+  enabled: true
+  max_transactions: 250
+  max_alerts: 100
+  max_cases: 50
+  max_counterparties: 50
+  transaction_lookback_days: null
+  show_feature_tables: true
+  show_linked_cases: true
+  show_graph_features: true
+  show_anomaly_scores: true
+  show_account_risk_scores: true
+
+model_metrics:
+  enabled: true
+  default_model_metric_limit: 500
+  default_score_limit: 1000
+  default_top_k_values:
+    - 10
+    - 25
+    - 50
+    - 100
+  show_mlflow_metadata: true
+  show_account_anomaly_scores: true
+  show_account_risk_scores: true
+  show_case_risk_scores: true
+  show_score_distributions: true
+  show_top_ranked_tables: true
+  show_precision_at_k_placeholder: true
+
+audit_log:
+  enabled: true
+  default_limit: 500
+  max_limit: 5000
+  default_components:
+    - ingestion
+    - validation
+    - rules
+    - graph
+    - models
+    - scoring
+    - cases
+    - dashboard
+  searchable_fields:
+    - event_type
+    - component
+    - action
+    - status
+    - run_id
+
+validation_report:
+  enabled: true
+  report_dir: reports/model_validation
+  max_preview_chars: 12000
+  allowed_extensions:
+    - .md
+    - .json
+    - .csv
+    - .txt
+  show_file_metadata: true
+  show_downloads: true

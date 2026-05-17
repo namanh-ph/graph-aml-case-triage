@@ -1,0 +1,32 @@
+neo4j:
+  uri: bolt://localhost:7687
+  username: neo4j
+  password_env_var: NEO4J_PASSWORD
+  database: neo4j
+  encrypted: false
+  connection_timeout_seconds: 10
+  max_connection_lifetime_seconds: 3600
+  max_connection_pool_size: 50
+
+analytics:
+  projection_relationship_types:
+    - OWNS
+    - SENT
+    - RECEIVED
+    - PAID_TO
+    - FLAGS_ACCOUNT
+    - INVOLVES_TRANSACTION
+  account_flow_relationship_types:
+    - SENT
+    - RECEIVED
+  max_shortest_path_depth: 4
+  pagerank_alpha: 0.85
+  betweenness_sample_size: null
+  community_algorithm: connected_components
+  include_counterparties: true
+  include_alert_nodes: true
+  include_transaction_nodes: true
+  cycle_max_hops: 4
+  high_risk_severities:
+    - high
+    - critical
