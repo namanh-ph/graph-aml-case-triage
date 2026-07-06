@@ -117,8 +117,8 @@ def main() -> None:
     engine = None
     try:
         engine = create_dashboard_engine()
-        detail = read_dashboard_case_detail(engine, case_id.strip())
-        evidence = read_dashboard_case_evidence(engine, case_id.strip())
+        detail = read_dashboard_case_detail(case_id.strip())
+        evidence = read_dashboard_case_evidence(case_id.strip())
         if detail["case"].empty:
             st.info("No case was found for the supplied ID.")
             return
